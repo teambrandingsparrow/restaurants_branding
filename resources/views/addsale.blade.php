@@ -37,7 +37,7 @@ $title = 'Add User | Mr:Rocks';
                             <div class="row">
                                 {{-- <div class="col-sm-12 b-r"> --}}
                                 <div class="col-md-5">
-                                    @if (Auth::user()->usertype == 1)
+                                    {{-- @if (Auth::user()->usertype == 1)
                                         <div class="col-md-12">
                                             <label class="col-form-label">Select Branch<span
                                                     style="color: red;">*</span></label>
@@ -49,7 +49,7 @@ $title = 'Add User | Mr:Rocks';
                                                 @endforeach
                                             </select>
                                         </div>
-                                    @endif
+                                    @endif --}}
                                     <div class="col-md-12 ">
                                         <label class="col-form-label">Date <span style="color: red;">*</span></label>
                                         <input class="form-control" required id="datepicker" name="date" type="date"

@@ -555,7 +555,7 @@ class HomeController extends Controller
 
 
 
-        // $purchase = Purchase::select('purchases.*', 'users.name')->join('users', 'users.id', 'purchases.create_by')->orderBy('purchases.id')
+     
         $sale = Sale::select('sales.*', 'users.name')->join('users', 'users.id', 'sales.create_by')->orderBy('sales.id')
             ->where($whr)
             ->where('sales.status', 0)
@@ -643,9 +643,7 @@ class HomeController extends Controller
             $model->increment('stock_count', $r->quantities);
             $model->save();
         }
-        // Saleproduct::where('id', $id)->update([
-        //     'status' => 1
-        // ]);
+       
         return redirect()->back()
             ->with('message', 'Sale has been deleted successfully');
     }
