@@ -60,6 +60,27 @@ $title = 'User LIst | Mr:Rocks';
                             @endif
                         </div>
                         <div class="table-responsive pt-3">
+                            <form method="get" class="form-horizontal">
+                                @csrf
+                                <h5 style="display: flex;" >
+                                <div><label>Date From</label>
+
+                                    <div style="margin-left: 3px;"><input type="date" required 
+                                        name="fromDate" value="{{ $from }}"
+                                   onchange="this.form.submit()" autocomplete="dob">
+                               </div>
+                               
+                                </div><br>
+                                <div><label >Date To</label>
+
+                                    <div style="margin-left: 3px;" ><input type="date" required name="toDate" value="{{ $to }}"
+                                        onchange="this.form.submit()" autocomplete="dob">
+                                </div>
+                                </div><br>
+                                </h5>
+                               
+                               
+                            </form>
                             <table id="example"class="table table-striped table-bordered table-hover dataTables-example">
                                 <thead>
                                     <tr>
@@ -103,7 +124,7 @@ $title = 'User LIst | Mr:Rocks';
                                                 <td>
                                                     @foreach ($sales->product as $item)
                                                         <p>
-                                                            <span>{{ $item->productname }}</span>
+                                                            <span>{{ $item->itemname }}</span>
                                                             <span
                                                                 style="float: right;padding-right: 7%;">{{ $item->quantities }}</span>
                                                         </p>

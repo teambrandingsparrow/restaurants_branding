@@ -83,18 +83,15 @@ class HomeController extends Controller
             $whr = array('stocks.create_by' => Auth::user()->id);
 
         $data['users'] = User::where('usertype', 2)->get();
-        $data['stock'] = Stock::select('stocks.*', 'products.productname', 'users.name')
+        $data['stock'] = Stock::select('stocks.*','products.productname','items.itemname','users.name')
             ->join('users', 'users.id', 'stocks.create_by')
             ->join('products', 'stocks.prodctid', '=', 'products.id')
+            ->join('items', 'stocks.prodctid', '=', 'items.id')
             ->where($whr)
             ->orderBy('stocks.id')
             ->get();
 
-        // $data['stock'] = Stock::select('stocks.*', 'products.productname', 'users.name')
-        //     ->join('users', 'users.id', 'stocks.create_by')
-        //     ->join('products', 'stocks.prodctid', '=', 'products.id')
-        //     ->orderBy('stocks.id')
-        //     ->get();
+       
 
         return view('home', $data);
     }
@@ -237,6 +234,7 @@ class HomeController extends Controller
         // $db->productitemcode = $request->productitemcode;
         // $db->costprice = $request->costprice;
         // $db->salesprice = $request->salesprice;
+        
         $db->create_by = $create_by;
         $db->save();
         $db->id;
@@ -573,14 +571,15 @@ class HomeController extends Controller
             $b = $cnt - $a;
             $count = ($b / 10) + 1;
         }
-
+        $from = $fromDate = $request->get('fromDate') ? $request->get('fromDate') : date('2022/01/01');
+        $to = $toDate = $request->get('toDate') ? $request->get('toDate') : date('Y/m/d');
         $data = array();
         foreach ($sale as $row) {
-            $row['product'] = Saleproduct::join('products', 'products.id', 'saleproducts.productName')->where('saleid', $row->id)->get();
+            $row['product'] = Saleproduct::join('items', 'items.id', 'saleproducts.productName')->where('saleid', $row->id)->get();
             array_push($data, $row);
         }
 
-        return view('salelist', compact('data', 'userId', 'users', 'count'));
+        return view('salelist', compact('data', 'userId', 'users', 'count','from','to'));
     }
     //sale edit
     public function saleedit($id)
@@ -728,13 +727,14 @@ class HomeController extends Controller
             $count = ($b / 10) + 1;
         }
 
+        $from = $fromDate = $request->get('fromDate') ? $request->get('fromDate') : date('2022/01/01');
+        $to = $toDate = $request->get('toDate') ? $request->get('toDate') : date('Y/m/d');
         $data = array();
         foreach ($sale as $row) {
-            $row['product'] = Saleproduct::join('products', 'products.id', 'saleproducts.productName')->where('saleid', $row->id)->get();
+            $row['product'] = Saleproduct::join('items', 'items.id', 'saleproducts.productName')->where('saleid', $row->id)->get();
             array_push($data, $row);
         }
-
-        return view('salereport', compact('data', 'userId', 'users', 'count'));
+        return view('salereport', compact('data', 'userId', 'users', 'count','from','to'));
     }
     public function stockreport(Request $request)
     {
