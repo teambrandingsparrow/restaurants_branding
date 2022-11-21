@@ -36,7 +36,7 @@ $title = 'Add User | Mr:Rocks';
                             @csrf
                             <div class="row">
                                 {{-- <div class="col-sm-12 b-r"> --}}
-                                <div class="col-md-5">
+                                <div class="col-md-4">
                                     {{-- @if (Auth::user()->usertype == 1)
                                         <div class="col-md-12">
                                             <label class="col-form-label">Select Branch<span
@@ -71,7 +71,7 @@ $title = 'Add User | Mr:Rocks';
                                 </div>
                                 <div class="col-md-7" id="tb">
                                     <div class="row">
-                                        <div class="col-md-5">
+                                        <div class="col-md-4">
                                             <label class="col-form-label"> Product Name <span
                                                     style="color: red;">*</span></label>
                                             <select class="form-control2 prds" onchange="getStock(this)" required
@@ -82,11 +82,26 @@ $title = 'Add User | Mr:Rocks';
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-md-5">
+                                        <div class="col-md-2">
                                             <label class="col-form-label">Quantity <span
                                                     style="color: red;">*</span></label>
                                             <input class="form-control qty" name="quantities[]" min="1" required
                                                 type="number" placeholder="Enter quantity">
+                                        </div>
+                                       
+                                        <div class="col-md-2">
+                                            <label class="col-form-label"> Price <span
+                                                    style="color: red;">*</span></label>
+                                            <input class="form-control cst" name="price_id[]" onchange="GetItem(this)"
+                                                type="number" placeholder="Price">
+
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label"> Tax Rate <span
+                                                    style="color: red;">*</span></label>
+                                            <input class="form-control tax" name="tax_id[]" onchange="GetItem(this)"
+                                                type="number" placeholder="Price">
+
                                         </div>
                                         <div class="col-md-2">
                                             <button
@@ -95,22 +110,37 @@ $title = 'Add User | Mr:Rocks';
                                         </div>
                                     </div>
                                     <div class="row" id="rr" hidden>
-                                        <div class="col-md-5">
+                                        <div class="col-md-4">
                                             <label class="col-form-label"> Product Name <span
                                                     style="color: red;">*</span></label>
-                                            <select class="form-control2 prds" id="prds" onchange="getStock(this)"
+                                            <select class="form-control2 prds" onchange="getStock(this)" 
                                                 name="productName[]">
                                                 <option value=""> Please Select</option>
                                                 @foreach ($item as $Row)
-                                                    <option value="{{ $Row->id }}">{{ $Row->itemname }}</option>
+                                                    <option value="{{ $Row->id }}">{{ $Row->itemname  }}</option>
                                                 @endforeach
                                             </select>
                                         </div>
-                                        <div class="col-md-5">
+                                        <div class="col-md-2">
                                             <label class="col-form-label">Quantity <span
                                                     style="color: red;">*</span></label>
-                                            <input class="form-control qty" name="quantities[]" min="1"type="number"
-                                                placeholder="Enter quantity">
+                                            <input class="form-control qty" name="quantities[]" min="1"
+                                                type="number" placeholder="Enter quantity">
+                                        </div>
+                                       
+                                        <div class="col-md-2">
+                                            <label class="col-form-label"> Price <span
+                                                    style="color: red;">*</span></label>
+                                            <input class="form-control cst" name="price_id[]" onchange="GetItem(this)"
+                                                type="number" placeholder="Price">
+
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label"> Tax Rate <span
+                                                    style="color: red;">*</span></label>
+                                            <input class="form-control tax" name="tax_id[]" onchange="GetItem(this)"
+                                                type="number" placeholder="Price">
+
                                         </div>
                                         <div class="col-md-2">
                                             <button onclick="remove(this)"
@@ -152,6 +182,17 @@ $title = 'Add User | Mr:Rocks';
                 $(this).parent().remove();
             })
         });
+        // function getStock(e) {
+        //     $.ajax({
+        //         url: "stock_count/" + $(e).val(),
+        //         success: function(result) {
+        //             $(e).parent().parent().find(".qty").attr({
+        //                 "max": result,
+        //                 "min": 0
+        //             });
+        //         }
+        //     });
+        // }
         function getStock(e) {
             $.ajax({
                 url: "stock_count/" + $(e).val(),
@@ -160,6 +201,17 @@ $title = 'Add User | Mr:Rocks';
                         "max": result,
                         "min": 0
                     });
+                }
+            });
+            $.ajax({
+                url: "getItem/" + $(e).val(),
+                success: function(result) {
+                    var data = JSON.parse(result);
+              
+                    $(e).parent().parent().find('.prds').val(data.item);
+                    $(e).parent().parent().find('.qty').val(data.qty);
+                    $(e).parent().parent().find('.cst').val(data.salesPrice);
+                    $(e).parent().parent().find('.tax').val(data.taxs);
                 }
             });
         }

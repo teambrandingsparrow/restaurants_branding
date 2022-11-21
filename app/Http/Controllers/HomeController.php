@@ -29,11 +29,17 @@ class HomeController extends Controller
         $this->middleware('auth');
     }
 
+    // public function getItem($id)
+    // {
+    //     $prd =  Product::where('id', $id)->first();
+    //     return json_encode(array('itemCode' => $prd->productitemcode, 'costPrice' => $prd->costprice));
+    // }
     public function getItem($id)
     {
-        $prd =  Product::where('id', $id)->first();
-        return json_encode(array('itemCode' => $prd->productitemcode, 'costPrice' => $prd->costprice));
+        $prd =  Items::where('id', $id)->first();
+        return json_encode(array('item' => $prd->id, 'salesPrice' => $prd->price, 'qty' => $prd->quantity, 'taxs'=>$prd->taxrate));
     }
+
 
     public function getProducts($id)
     {
@@ -477,7 +483,9 @@ class HomeController extends Controller
     //sale crud option
     public function addsale()
     {
+
         $data['item'] = Items::orderBy('id')->get();
+        $data['items'] = Items::get();
         // $data['product'] = Product::orderBy('id')->get();
         if (Auth::user()->usertype != 1) {
             $data['product'] = Product::where('create_by', Auth::user()->id)->orderBy('id')->get();
@@ -523,6 +531,8 @@ class HomeController extends Controller
                 $sale->productName = $productName;
                 $sale->saleid = $db->id;
                 $sale->quantities = $request->quantities[$key];
+                $sale->price_id = $request->price_id[$key];
+                $sale->tax_id = $request->tax_id[$key];
                 $sale->create_by = Auth::user()->id;
                 $sale->save();
                 $model = Stock::where('prodctid', $productName)->first();
@@ -772,6 +782,13 @@ class HomeController extends Controller
         $db->quantity = $request->quantity;
         $db->price = $request->price;
         $db->taxrate = $request->taxrate;
+        if ($request->file()) {
+            $fileName = time() . rand(0, 1000) . '.' . $request->file->getClientOriginalExtension();
+            $request->file->move(public_path() . '/uploads', $fileName);
+            $db->file = $fileName;
+            $db->file_path = '/uploads/' . $fileName;
+        }
+    
         $db->save();
         $db->id;
         $stock = new Stock();
@@ -806,6 +823,12 @@ class HomeController extends Controller
         $db->quantity = $request->quantity;
         $db->price = $request->price;
         $db->taxrate = $request->taxrate;
+        if ($request->file()) {
+            $fileName = time() . rand(0, 1000) . '.' . $request->file->getClientOriginalExtension();
+            $request->file->move(public_path() . '/uploads', $fileName);
+            $db->file = $fileName;
+            $db->file_path = '/uploads/' . $fileName;
+        }
         $db->save();
         return redirect('Itemlist')->with('message', 'Update Successfully');
     }

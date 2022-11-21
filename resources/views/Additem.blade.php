@@ -31,7 +31,7 @@ $title = 'Add User | Mr:Rocks';
                                 {{ session()->get('error') }}
                             </div>
                         @endif
-                        <form method="POST" action="{{ url('itemStore') }}">
+                        <form method="POST" action="{{ url('itemStore') }}" enctype="multipart/form-data">
                             @csrf
                             @if (Auth::user()->usertype == 1)
                                 <div class="form-group row">
@@ -106,6 +106,15 @@ $title = 'Add User | Mr:Rocks';
                                 <div class="col-lg-8">
                                     <input class="form-control" name="taxrate" type="number"
                                         value="{{ old('taxrate') }}"placeholder="Enter Tax Rate">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-3">
+                                    <label class="col-form-label"> Image <span style="color: red;">*</span></label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input class="form-control" name="file" type="file"
+                                       placeholder="Upload image" style="background-color:none;important">
                                 </div>
                             </div>
                             <center><button type="submit"style="background-color:black;border-radius:10px;"

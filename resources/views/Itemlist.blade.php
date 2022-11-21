@@ -69,7 +69,7 @@ $current_page = 'Product';
                                         <th> price </th>
                                         <th> quantityTypes </th>
                                         <th> taxrate </th>
-                                        
+                                        <th>Image</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -90,7 +90,8 @@ $current_page = 'Product';
                                             <td>{{ $item->price }}</td>
                                             <td>{{ $item->quantityTypes }}</td>
                                             <td>{{ $item->taxrate }}</td>
-                                           
+                                            <td><img src="{{ $item->file_path }}" width="50" alt=""
+                                                srcset=""></td>
                                             <td>
                                                 <h3 style="display: flex;">
                                                     {{-- class="btn btn-primary" --}}

@@ -22,6 +22,8 @@ return new class extends Migration
             $table->double('quantitytype');
             $table->double('taxrate');
             $table->integer('status')->default(0);
+            $table->string('file');
+            $table->string('file_path');
             $table->timestamps();
         });
     }

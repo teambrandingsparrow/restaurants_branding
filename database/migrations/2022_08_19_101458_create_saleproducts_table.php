@@ -19,6 +19,8 @@ return new class extends Migration
             $table->integer('saleid');
             $table->integer('quantities');
             $table->integer('create_by');
+            $table->integer('price_id');
+            $table->integer('tax_id');
             $table->timestamps();
         });
     }
