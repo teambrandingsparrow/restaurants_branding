@@ -104,7 +104,7 @@ $title = 'User LIst | Mr:Rocks';
                                         <th></th>
                                         <th></th>
                                         <th></th>
-                                        <th><span>Product Name</span> <span style="float: right;">QTY</span></th>
+                                        <th><span style="float: left;">Product Name</span>&nbsp; &nbsp; &nbsp; &nbsp;<span style="float: center;">Price</span>&nbsp; &nbsp; &nbsp; &nbsp; <span >Tax Rate</span>  <span style="float: right;">QTY</span></th>
                                         <th></th>
                                     </tr>
                                     @php
@@ -123,9 +123,11 @@ $title = 'User LIst | Mr:Rocks';
                                                 <td>
                                                     @foreach ($sales->product as $item)
                                                         <p>
-                                                            <span>{{ $item->itemname }}</span>
+                                                            <span style="float: left;padding-right: 17%;">{{ $item->itemname }}</span>
                                                             <span
-                                                                style="float: right;padding-right: 7%;">{{ $item->quantities }}</span>
+                                                                style="float: right;padding-right: 0%;">{{ $item->quantities }}</span>
+                                                                <span style="float: left;padding-right: 7%;">{{ $item->price_id }}</span>
+                                                                <span >{{ $item->tax_id }}</span>
                                                         </p>
                                                     @endforeach
                                                 </td>

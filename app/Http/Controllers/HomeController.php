@@ -37,7 +37,7 @@ class HomeController extends Controller
     public function getItem($id)
     {
         $prd =  Items::where('id', $id)->first();
-        return json_encode(array('item' => $prd->id, 'salesPrice' => $prd->price, 'qty' => $prd->quantity, 'taxs'=>$prd->taxrate));
+        return json_encode(array('item' => $prd->id, 'salesPrice' => $prd->price, 'qty' => $prd->quantity, 'taxs'=>$prd->taxrate,'img'=>$prd->file_path));
     }
 
 
@@ -598,7 +598,7 @@ class HomeController extends Controller
             ->first();
         $data['product'] = Product::where('create_by', $sa->create_by)->orderBy('id')->get();
         $data['saleproduct'] = Saleproduct::where('saleid', $id)->get();
-
+        $data['item']=Items::orderBy('id')->get();
         if (Auth::user()->usertype == 1) {
             $data['users'] = User::where('usertype', 2)->get();
         }

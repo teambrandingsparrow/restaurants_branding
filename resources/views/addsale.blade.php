@@ -71,12 +71,12 @@ $title = 'Add User | Mr:Rocks';
                                 </div>
                                 <div class="col-md-7" id="tb">
                                     <div class="row">
-                                        <div class="col-md-4">
+                                        <div class="col-md-2">
                                             <label class="col-form-label"> Product Name <span
                                                     style="color: red;">*</span></label>
                                             <select class="form-control2 prds" onchange="getStock(this)" required
                                                 name="productName[]">
-                                                <option value=""> Please Select</option>
+                                                <option value="">Select</option>
                                                 @foreach ($item as $Row)
                                                     <option value="{{ $Row->id }}">{{ $Row->itemname  }}</option>
                                                 @endforeach
@@ -86,7 +86,7 @@ $title = 'Add User | Mr:Rocks';
                                             <label class="col-form-label">Quantity <span
                                                     style="color: red;">*</span></label>
                                             <input class="form-control qty" name="quantities[]" min="1" required
-                                                type="number" placeholder="Enter quantity">
+                                                type="number" placeholder="Quantity">
                                         </div>
                                        
                                         <div class="col-md-2">
@@ -101,7 +101,10 @@ $title = 'Add User | Mr:Rocks';
                                                     style="color: red;">*</span></label>
                                             <input class="form-control tax" name="tax_id[]" onchange="GetItem(this)"
                                                 type="number" placeholder="Price">
-
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label">image</label><br>
+                                            <img class="img" name="img[]"style="width:45px;height:45px;" onchange="GetItem(this)">
                                         </div>
                                         <div class="col-md-2">
                                             <button
@@ -110,12 +113,12 @@ $title = 'Add User | Mr:Rocks';
                                         </div>
                                     </div>
                                     <div class="row" id="rr" hidden>
-                                        <div class="col-md-4">
+                                        <div class="col-md-2">
                                             <label class="col-form-label"> Product Name <span
                                                     style="color: red;">*</span></label>
                                             <select class="form-control2 prds" onchange="getStock(this)" 
                                                 name="productName[]">
-                                                <option value=""> Please Select</option>
+                                                <option value="">Select</option>
                                                 @foreach ($item as $Row)
                                                     <option value="{{ $Row->id }}">{{ $Row->itemname  }}</option>
                                                 @endforeach
@@ -125,7 +128,7 @@ $title = 'Add User | Mr:Rocks';
                                             <label class="col-form-label">Quantity <span
                                                     style="color: red;">*</span></label>
                                             <input class="form-control qty" name="quantities[]" min="1"
-                                                type="number" placeholder="Enter quantity">
+                                                type="number" placeholder="Quantity">
                                         </div>
                                        
                                         <div class="col-md-2">
@@ -141,6 +144,10 @@ $title = 'Add User | Mr:Rocks';
                                             <input class="form-control tax" name="tax_id[]" onchange="GetItem(this)"
                                                 type="number" placeholder="Price">
 
+                                        </div>
+                                        <div class="col-md-2">
+                                            <label class="col-form-label">image</label><br>
+                                                    <img class="img" name="img[]" style="width:45px;height:45px;" onchange="GetItem(this)">
                                         </div>
                                         <div class="col-md-2">
                                             <button onclick="remove(this)"
@@ -212,6 +219,8 @@ $title = 'Add User | Mr:Rocks';
                     $(e).parent().parent().find('.qty').val(data.qty);
                     $(e).parent().parent().find('.cst').val(data.salesPrice);
                     $(e).parent().parent().find('.tax').val(data.taxs);
+                    $(e).parent().parent().find('.img').attr("src",data.img);
+                   
                 }
             });
         }
