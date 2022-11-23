@@ -3,15 +3,15 @@ $current_page = 'Product';
 ?>
 @extends('layouts.app')
 <?php
-$title = 'Add User | Mr:Rocks';
+$title = 'Item Edit | ERP Bangalore';
 ?>
-@section('content')
+@section('content') 
     <div class="content-wrapper">
         <div class="row grid-margin">
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Product Category Add</h4>
+                        <h4 class="card-title">Update Items</h4>
                         @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>

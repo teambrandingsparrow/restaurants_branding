@@ -35,7 +35,7 @@ $title = 'Add User | Mr:Rocks';
                                         <div class="col-md-12">
                                             <label class="col-form-label">Select Branch<span
                                                     style="color: red;">*</span></label>
-                                            <select class="form-control2" required disabled name="user">
+                                            <select class="form-control2"disabled name="user">
                                                 <option value="">Select Branch</option>
                                                 @foreach ($users as $item)
                                                     <option @if ($sale->create_by == $item->id) selected @endif
@@ -75,7 +75,7 @@ $title = 'Add User | Mr:Rocks';
                                             <select class="form-control2" id="prds" onchange="getStock(this)"
                                                 name="productName[]">
                                                 <option value=""> Please Select</option>
-                                                @foreach ($item as $Row)
+                                                @foreach ($items as $Row)
                                                     <option value="{{ $Row->id }}">{{ $Row->itemname }}</option>
                                                 @endforeach
                                             </select>
@@ -89,19 +89,19 @@ $title = 'Add User | Mr:Rocks';
                                         <div class="col-md-2">
                                             <label class="col-form-label"> Price <span
                                                     style="color: red;">*</span></label>
-                                            <input class="form-control cst" name="price_id[]" onchange="GetItem(this)"
+                                            <input class="form-control cst" name="price_id[]" 
                                                 type="number" placeholder="Price">
 
                                         </div>
                                         <div class="col-md-2">
                                             <label class="col-form-label"> Tax Rate <span
                                                     style="color: red;">*</span></label>
-                                            <input class="form-control tax" name="tax_id[]" onchange="GetItem(this)"
+                                            <input class="form-control tax" name="tax_id[]" 
                                                 type="number" placeholder="Price">
                                         </div>
                                         <div class="col-md-2">
                                             <label class="col-form-label">image</label><br>
-                                            <img class="img" name="img[]"style="width:45px;height:45px;" onchange="GetItem(this)">
+                                            <img class="img" name="img[]"style="width:45px;height:45px;" >
                                         </div>
                                         <div class="col-md-2">
 
@@ -125,10 +125,10 @@ $title = 'Add User | Mr:Rocks';
                                                 <label class="col-form-label"> Product Name <span
                                                         style="color: red;">*</span></label>
                                                 <select class="form-control2 prds" name="productName[]">
-                                                    @foreach ($product as $Row)
+                                                    @foreach ($items as $Row)
                                                         @if ($item->productName == $Row->id)
                                                             <option @if ($item->productName == $Row->id) selected @endif
-                                                                value="{{ $Row->id }}">{{ $Row->productname }}
+                                                                value="{{ $Row->id }}">{{ $Row->itemname }}
                                                             </option>
                                                         @endif
                                                     @endforeach
@@ -144,23 +144,22 @@ $title = 'Add User | Mr:Rocks';
                                             <div class="col-md-2">
                                                 <label class="col-form-label"> Price <span
                                                         style="color: red;">*</span></label>
-                                                <input class="form-control cst" name="price_id[]" onchange="GetItem(this)"
-                                                    type="number" placeholder="Price">
+                                                <input class="form-control cst" name="price_id[]" 
+                                                    type="number" placeholder="Price" value="{{$item->price_id}}">
     
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="col-form-label"> Tax Rate <span
                                                         style="color: red;">*</span></label>
-                                                <input class="form-control tax" name="tax_id[]" onchange="GetItem(this)"
-                                                    type="number" placeholder="Price">
+                                                <input class="form-control tax" name="tax_id[]" 
+                                                    type="number" placeholder="Price" value="{{$item->tax_id}}">
                                             </div>
                                             <div class="col-md-2">
                                                 <label class="col-form-label">image</label><br>
-                                                <img class="img" name="img[]"style="width:45px;height:45px;" onchange="GetItem(this)">
+                                                {{-- <img class="img" src="{{ $item->file_path }}"name="img[]"style="width:45px;height:45px;" > --}}
                                             </div>
                                             
                                             <div class="col-md-2">
-
                                                 @if ($cnt == 1)
                                                     <button
                                                         id="btn"type="button"style="background-color:black;border-radius:10px;margin-top:38%"
@@ -173,20 +172,11 @@ $title = 'Add User | Mr:Rocks';
                                             </div>
                                         </div>
                                     @endforeach
-
                                 </div>
-
-
                             </div>
-
-
                             <br>
-
-
-
                             <center><button type="submit"style="background-color:black;border-radius:10px;"
                                     class="btn btn-primary">Update</button>
-
                             </center>
                         </form>
                     </div>

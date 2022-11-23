@@ -598,7 +598,7 @@ class HomeController extends Controller
             ->first();
         $data['product'] = Product::where('create_by', $sa->create_by)->orderBy('id')->get();
         $data['saleproduct'] = Saleproduct::where('saleid', $id)->get();
-        $data['item']=Items::orderBy('id')->get();
+        $data['items']=Items::orderBy('id')->get();
         if (Auth::user()->usertype == 1) {
             $data['users'] = User::where('usertype', 2)->get();
         }
@@ -631,6 +631,8 @@ class HomeController extends Controller
                 $sale->productName = $productName;
                 $sale->saleid = $db->id;
                 $sale->quantities = $request->quantities[$key];
+                $sale->price_id = $request->price_id[$key];
+                $sale->tax_id = $request->tax_id[$key];
                 $sale->create_by = Auth::user()->id;
                 $sale->save();
                 $model = Stock::where('prodctid', $productName)->first();
