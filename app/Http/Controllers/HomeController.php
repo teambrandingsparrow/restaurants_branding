@@ -75,325 +75,30 @@ class HomeController extends Controller
     }
     public function index(Request $request)
     {
-        $data['productCount'] = Product::count();
-        $data['PurchaseCount'] = Purchase::count();
-        $data['SaleCount'] = Sale::count();
-        $data['userId'] = $userId = $request->get('user') ? $request->get('user') : 0;
-
-        if (Auth::user()->usertype == 1) {
-            if ($userId != 0)
-                $whr['stocks.create_by'] = $userId;
-            else
-                $whr = [];
-        } else
-            $whr = array('stocks.create_by' => Auth::user()->id);
-
-        $data['users'] = User::where('usertype', 2)->get();
-        $data['stock'] = Stock::select('stocks.*','products.productname','items.itemname','users.name')
-            ->join('users', 'users.id', 'stocks.create_by')
-            ->join('products', 'stocks.prodctid', '=', 'products.id')
-            ->join('items', 'stocks.prodctid', '=', 'items.id')
-            ->where($whr)
-            ->orderBy('stocks.id')
-            ->get();
-
-       
-
-        return view('home', $data);
-    }
-    public function Addcategory()
-    {
-        return view('Addcategory');
-    }
-    public function addcategoryStore(Request $request)
-    {
-        $request->validate([
-            'categoryname' => ['required', 'string', 'max:255', 'unique:productcategories'],
-        ]);
-        Productcategory::create([
-            'categoryname' => $request->get('categoryname'),
-        ]);
-        return redirect('Addcategory')->with('message', 'Product Category Added Successfully');
-    }
-    public function Categorylist()
-    {
-        $data['category'] = Productcategory::where('status', 0)->orderBy('id')->get();
-        return view('Categorylist', $data);
-    }
-    public function Categoryedit($id)
-    {
-        $data['category'] = Productcategory::where('id', $id)
-            ->first();
-        return view('Categoryedit', $data);
-    }
-    public function Categoryupdate(Request $request, $id)
-    {
-        $request->validate([
-            'categoryname' => ['required', 'string', 'max:255'],
-        ]);
-        Productcategory::where('id', $id)->update([
-            'categoryname' => $request->get('categoryname'),
-        ]);
-        return redirect('Categorylist')->with('message', 'Product Category Update Successfully');
-    }
-    public function destroy(Productcategory $categorys, $id)
-    {
-        Productcategory::where('id', $id)->update([
-            'status' => 1
-        ]);
-        return redirect('Categorylist')
-            ->with('message', 'Product Category has been deleted successfully');
-    }
-    //addproduct
-    public function Addproduct()
-    {
-        $data['category'] = Productcategory::where('status', 0)->orderBy('id')->get();
-        $data['users'] = User::where('usertype', 2)->get();
-        return view('Addproduct', $data);
-    }
-    public function addproductStore(Request $request)
-    {
-        $request->validate([
-            'category' => ['required', 'string', 'max:255'],
-            'productname' => ['required', 'string', 'max:255',],
-            'quantity' => ['required', 'string'],
-        ]);
-        if (Auth::user()->usertype == 1)
-            $create_by = $request->user;
-        else
-            $create_by = Auth::user()->id;
-        if (Product::where(array('create_by' => $create_by, 'productname' => $request->productname))->count() > 0) {
-            return redirect('Productlist')->with('error', 'Product already exist');
-        }
-        // productitemcode
-        $db = new Product();
-        $db->category = $request->category;
-        $db->productname = $request->productname;
-        $db->quantity = $request->quantity;
-        // $db->productitemcode = $request->productitemcode;
-        // $db->costprice = $request->costprice;
-        // $db->salesprice = $request->salesprice;
-        $db->create_by = $create_by;
-        $db->productid = 1;
-        $db->save();
-        $db->id;
-        $stock = new Stock();
-        $stock->stock_count = $request->quantity;
-        $stock->prodctid = $db->id;
-        $stock->create_by = $create_by;
-        $stock->save();
-
-        return redirect('Addproduct')->with('message', 'Product  Added Successfully');
-    }
-    public function Productlist(Request $request)
-    {
-        $data['userId'] = $userId = $request->get('user') ? $request->get('user') : 0;
-
-        if (Auth::user()->usertype == 1) {
-            if ($userId != 0)
-                $whr['create_by'] = $userId;
-            else
-                $whr = [];
-        } else
-            $whr = array('products.create_by' => Auth::user()->id);
-
-        $data['users'] = User::where('usertype', 2)->get();
-        // $purchase = Purchase::select('purchases.*', 'users.name')->join('users', 'users.id', 'purchases.create_by')->orderBy('purchases.id')
-        $data['product'] = Product::select('products.*', 'productcategories.categoryname', 'users.name')
-            ->join('users', 'users.id', 'products.create_by')
-            ->join('productcategories', 'products.category', '=', 'productcategories.id')
-            ->where($whr)
-            ->where('products.status', 0)
-            ->orderBy('products.id')
-            ->get();
-        return view('Productlist', $data);
-    }
-    public function Productedit($id)
-    {
-        $data['category'] = Productcategory::where('status', 0)->orderBy('id')->get();
-        $data['product'] = Product::where('id', $id)
-            ->first();
-        $data['users'] = User::where('usertype', 2)->get();
-        return view('Productedit', $data);
-    }
-    public function Productupdate(Request $request, $id)
-    {
-        $request->validate([
-            'category' => ['required', 'string', 'max:255'],
-            'productname' => ['required', 'string', 'max:255'],
-        ]);
-        if (Auth::user()->usertype == 1)
-            $create_by = $request->user;
-        else
-            $create_by = Auth::user()->id;
-
-
-
-        if (Product::where(array('create_by' => $create_by, 'productname' => $request->productname))->where('id', '!=', $id)->count() > 0) {
-            return back()->with('error', 'Product already exist');
-        }
-
-
-        $db = Product::find($id);
-        $db->category = $request->category;
-        $db->productname = $request->productname;
-        // $db->productitemcode = $request->productitemcode;
-        // $db->costprice = $request->costprice;
-        // $db->salesprice = $request->salesprice;
-        
-        $db->create_by = $create_by;
-        $db->save();
-        $db->id;
-        return redirect('Productlist')->with('message', 'Product  Update Successfully');
-    }
-    public function destroys(Product $product, $id)
-    {
-
-        Product::where('id', $id)->update([
-            'status' => 1
-        ]);
-        return redirect()->back()
-            ->with('message', 'Product  has been deleted successfully');
-    }
-
-
-    public function stocklist(Request $request)
-    {
-        $data['userId'] = $userId = $request->get('user') ? $request->get('user') : 0;
-
-        if (Auth::user()->usertype == 1) {
-            if ($userId != 0)
-                $whr['stocks.create_by'] = $userId;
-            else
-                $whr = [];
-        } else
-            $whr = array('stocks.create_by' => Auth::user()->id);
-
-        $data['users'] = User::where('usertype', 2)->get();
-
-
-        // $purchase = Purchase::select('purchases.*', 'users.name')->join('users', 'users.id', 'purchases.create_by')->orderBy('purchases.id')
-        $data['stock'] = Stock::select('stocks.*', 'products.productname', 'users.name')
-            ->join('users', 'users.id', 'stocks.create_by')
-            ->join('products', 'stocks.prodctid', '=', 'products.id')
-            ->where($whr)
-            ->orderBy('stocks.id')
-            ->get();
-
-        return view('stocklist', $data);
-    }
-    public function stockedit($id)
-    {
-
-        $data['stock'] = Stock::select('stocks.*', 'products.productname')->join('products', 'products.id', 'prodctid')->where('stocks.id', $id)
-            ->first();
-        return view('stockedit', $data);
-    }
-    public function stockUpdate(Request $request, $id)
-    {
-        $request->validate([
-            'productname' => ['required'],
-            'quantity' => ['required'],
-        ]);
-        $stock = Stock::find($id);
-        $stock->stock_count = $request->quantity;
-        $stock->prodctid = $request->productname;
-        $stock->save();
-
-        return redirect('stocklist')->with('message', 'Stock Update Successfully');
-    }
-    public function destroye(Stock $stock, $id)
-    {
-
-        Stock::where('id', $id)->delete();
-        return redirect()->back()
-            ->with('message', 'Stock has been deleted successfully');
-    }
-    //purchase add or crud option
-    //
-    // addPurchase
-    public function addPurchase()
-    {
-
-        $data['product'] = Product::orderBy('id')->get();
-        if (Auth::user()->usertype != 1) {
-            $data['product'] = Product::where('create_by', Auth::user()->id)->orderBy('id')->get();
-            $lastId = Purchase::where('create_by', Auth::user()->id)->count();
-            $branch = Auth::user()->branch;
-            $yr = date('m') . date('y');
-            $data['number'] = 'B' . $branch . 'P_' . $yr . '_' . str_pad($lastId + 1, 5, 0, STR_PAD_LEFT);
-        } else {
-            $lastId = Purchase::where('create_by', Auth::user()->id)->count();
-            $branch = Auth::user()->branch;
-            $yr = date('m') . date('y');
-            $data['number'] = 'B' . $branch . 'P_' . $yr . '_' . str_pad($lastId + 1, 5, 0, STR_PAD_LEFT);
-            $data['users'] = User::where('usertype', 2)->get();
-        }
-
-        return view('addPurchase', $data);
-    }
-    public function addPurchaseStore(Request $request)
-    {
-
-        // 
-        $request->validate([
-            'date' => ['required'],
-            // 'invoicenumber' => ['required'],
-            'number' => ['required'],
-            'suppliername' => ['required', 'string'],
-        ]);
-
-        if (Auth::user()->usertype == 1)
-            $create_by = $request->user;
-        else
-            $create_by = Auth::user()->id;
-
-        $db = new Purchase();
-        $db->date = $request->date;
-        $db->invoicenumber = $request->invoicenumber;
-        $db->number = $request->number;
-        $db->suppliername = $request->suppliername;
-        $db->create_by = $create_by;
-        $db->save();
-        $db->id;
-        foreach ($request->productName as $key => $productName) {
-            if ($productName != '') {
-                $purchase = new PurchaseProduct();
-                $purchase->productName = $productName;
-                $purchase->purchaseid = $db->id;
-                $purchase->quantities = $request->quantities[$key];
-                // $purchase->costpriceid = $request->costpriceid;
-                // $purchase->itemcodeid = $request->itemcodeid;
-                $purchase->create_by = Auth::user()->id;
-                $purchase->save();
-                $model = Stock::where('prodctid', $productName)->first();
-                $model->increment('stock_count', $request->quantities[$key]);
-                $model->save();
-            }
-        }
-
-        return redirect('purchaselist')->with('message', 'Purchase Added Successfully');
-    }
-
-    public function purchaselist(Request $request)
-    {
+        $productCount = Items::count();
+        // $data['PurchaseCount'] = Purchase::count();
+        $SaleCount = Sale::count();
         $userId = $userId = $request->get('user') ? $request->get('user') : 0;
 
         if (Auth::user()->usertype == 1) {
             if ($userId != 0)
-                $whr['create_by'] = $userId;
+                $whr['sales.create_by'] = $userId;
             else
                 $whr = [];
         } else
-            $whr = array('purchases.create_by' => Auth::user()->id);
-        $users = User::where('usertype', 2)->get();
-        $purchase = Purchase::select('purchases.*', 'users.name')->join('users', 'users.id', 'purchases.create_by')->orderBy('purchases.id')
+            $whr = array('sales.create_by' => Auth::user()->id);
+
+        $users= User::where('usertype', 2)->get();
+      
+        //saletable
+        $sale = Sale::select('sales.*', 'users.name')->join('users', 'users.id', 'sales.create_by')->orderBy('sales.id')
             ->where($whr)
-            ->where('status', 0)
+            ->where('sales.status', 0)
             ->get();
-        $cnt = Purchase::join('users', 'users.id', 'purchases.create_by')
+
+        $cnt = Sale::join('users', 'users.id', 'sales.create_by')->orderBy('sales.id')
             ->where($whr)
-            ->where('status', 0)
+            ->where('sales.status', 0)
             ->count();
 
         if ($cnt % 10 == 0) {
@@ -403,83 +108,394 @@ class HomeController extends Controller
             $b = $cnt - $a;
             $count = ($b / 10) + 1;
         }
+        $from = $fromDate = $request->get('fromDate') ? $request->get('fromDate') : date('2022/01/01');
+        $to = $toDate = $request->get('toDate') ? $request->get('toDate') : date('Y/m/d');
         $data = array();
-        foreach ($purchase as $row) {
-            $row['product'] = PurchaseProduct::join('products', 'products.id', 'purchase_products.productName')->where('purchaseid', $row->id)
-                ->get();
+        foreach ($sale as $row) {
+            $row['product'] = Saleproduct::join('items', 'items.id', 'saleproducts.productName')->where('saleid', $row->id)->get();
             array_push($data, $row);
         }
-        return view('purchaselist', compact('data', 'userId', 'users', 'count'));
+        return view('home',compact('data', 'userId', 'users', 'count','from','to','productCount','SaleCount'));
     }
-    public function Purchaseedit($id)
-    {
-        $data['purchase'] = $pr = Purchase::where('id', $id)
-            ->first();
-        $data['product'] = Product::where('create_by', $pr->create_by)->orderBy('id')->get();
-        $data['purchaseproduct'] = PurchaseProduct::where('purchaseid', $id)->get();
+    // public function Addcategory()
+    // {
+    //     return view('Addcategory');
+    // }
+    // public function addcategoryStore(Request $request)
+    // {
+    //     $request->validate([
+    //         'categoryname' => ['required', 'string', 'max:255', 'unique:productcategories'],
+    //     ]);
+    //     Productcategory::create([
+    //         'categoryname' => $request->get('categoryname'),
+    //     ]);
+    //     return redirect('Addcategory')->with('message', 'Product Category Added Successfully');
+    // }
+    // public function Categorylist()
+    // {
+    //     $data['category'] = Productcategory::where('status', 0)->orderBy('id')->get();
+    //     return view('Categorylist', $data);
+    // }
+    // public function Categoryedit($id)
+    // {
+    //     $data['category'] = Productcategory::where('id', $id)
+    //         ->first();
+    //     return view('Categoryedit', $data);
+    // }
+    // public function Categoryupdate(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'categoryname' => ['required', 'string', 'max:255'],
+    //     ]);
+    //     Productcategory::where('id', $id)->update([
+    //         'categoryname' => $request->get('categoryname'),
+    //     ]);
+    //     return redirect('Categorylist')->with('message', 'Product Category Update Successfully');
+    // }
+    // public function destroy(Productcategory $categorys, $id)
+    // {
+    //     Productcategory::where('id', $id)->update([
+    //         'status' => 1
+    //     ]);
+    //     return redirect('Categorylist')
+    //         ->with('message', 'Product Category has been deleted successfully');
+    // }
+    // //addproduct
+    // public function Addproduct()
+    // {
+    //     $data['category'] = Productcategory::where('status', 0)->orderBy('id')->get();
+    //     $data['users'] = User::where('usertype', 2)->get();
+    //     return view('Addproduct', $data);
+    // }
+    // public function addproductStore(Request $request)
+    // {
+    //     $request->validate([
+    //         'category' => ['required', 'string', 'max:255'],
+    //         'productname' => ['required', 'string', 'max:255',],
+    //         'quantity' => ['required', 'string'],
+    //     ]);
+    //     if (Auth::user()->usertype == 1)
+    //         $create_by = $request->user;
+    //     else
+    //         $create_by = Auth::user()->id;
+    //     if (Product::where(array('create_by' => $create_by, 'productname' => $request->productname))->count() > 0) {
+    //         return redirect('Productlist')->with('error', 'Product already exist');
+    //     }
+    //     // productitemcode
+    //     $db = new Product();
+    //     $db->category = $request->category;
+    //     $db->productname = $request->productname;
+    //     $db->quantity = $request->quantity;
+    //     // $db->productitemcode = $request->productitemcode;
+    //     // $db->costprice = $request->costprice;
+    //     // $db->salesprice = $request->salesprice;
+    //     $db->create_by = $create_by;
+    //     $db->productid = 1;
+    //     $db->save();
+    //     $db->id;
+    //     $stock = new Stock();
+    //     $stock->stock_count = $request->quantity;
+    //     $stock->prodctid = $db->id;
+    //     $stock->create_by = $create_by;
+    //     $stock->save();
+
+    //     return redirect('Addproduct')->with('message', 'Product  Added Successfully');
+    // }
+    // public function Productlist(Request $request)
+    // {
+    //     $data['userId'] = $userId = $request->get('user') ? $request->get('user') : 0;
+
+    //     if (Auth::user()->usertype == 1) {
+    //         if ($userId != 0)
+    //             $whr['create_by'] = $userId;
+    //         else
+    //             $whr = [];
+    //     } else
+    //         $whr = array('products.create_by' => Auth::user()->id);
+
+    //     $data['users'] = User::where('usertype', 2)->get();
+    //     // $purchase = Purchase::select('purchases.*', 'users.name')->join('users', 'users.id', 'purchases.create_by')->orderBy('purchases.id')
+    //     $data['product'] = Product::select('products.*', 'productcategories.categoryname', 'users.name')
+    //         ->join('users', 'users.id', 'products.create_by')
+    //         ->join('productcategories', 'products.category', '=', 'productcategories.id')
+    //         ->where($whr)
+    //         ->where('products.status', 0)
+    //         ->orderBy('products.id')
+    //         ->get();
+    //     return view('Productlist', $data);
+    // }
+    // public function Productedit($id)
+    // {
+    //     $data['category'] = Productcategory::where('status', 0)->orderBy('id')->get();
+    //     $data['product'] = Product::where('id', $id)
+    //         ->first();
+    //     $data['users'] = User::where('usertype', 2)->get();
+    //     return view('Productedit', $data);
+    // }
+    // public function Productupdate(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'category' => ['required', 'string', 'max:255'],
+    //         'productname' => ['required', 'string', 'max:255'],
+    //     ]);
+    //     if (Auth::user()->usertype == 1)
+    //         $create_by = $request->user;
+    //     else
+    //         $create_by = Auth::user()->id;
 
 
-        if (Auth::user()->usertype == 1) {
-            $data['users'] = User::where('usertype', 2)->get();
-        }
-        return view('Purchaseedit', $data);
-    }
-    // Purchaseedit
-    public function purchaseUpdate(Request $request, $id)
-    {
-        $request->validate([
-            'date' => ['required'],
-            // 'invoicenumber' => ['required'],
-            'number' => ['required'],
-            'suppliername' => ['required', 'string'],
-        ]);
 
-        $db = Purchase::find($id);
-        $db->date = $request->date;
-        $db->invoicenumber = $request->invoicenumber;
-        $db->number = $request->number;
-        $db->suppliername = $request->suppliername;
-        $db->save();
+    //     if (Product::where(array('create_by' => $create_by, 'productname' => $request->productname))->where('id', '!=', $id)->count() > 0) {
+    //         return back()->with('error', 'Product already exist');
+    //     }
 
-        $d =  PurchaseProduct::where('purchaseid', $id)->get();
-        foreach ($d as $r) {
-            $model = Stock::where('prodctid', $r->productName)->first();
-            $model->decrement('stock_count', $r->quantities);
-            $model->save();
-        }
-        PurchaseProduct::where('purchaseid', $id)->delete();
 
-        foreach ($request->productName as $key => $productName) {
-            if ($productName != '') {
-                $purchase = new PurchaseProduct();
-                $purchase->productName = $productName;
-                $purchase->purchaseid = $id;
-                $purchase->quantities = $request->quantities[$key];
-                $purchase->create_by = Auth::user()->id;
-                $purchase->save();
-                $model = Stock::where('prodctid', $productName)->first();
-                $model->increment('stock_count', $request->quantities[$key]);
-                $model->save();
-            }
-        }
-        return redirect('purchaselist')->with('message', 'Purchase Update Successfully');
-    }
-    public function destro(Purchase $purchase, $id)
-    {
-        Purchase::where('id', $id)->update([
-            'status' => 1
-        ]);
+    //     $db = Product::find($id);
+    //     $db->category = $request->category;
+    //     $db->productname = $request->productname;
+    //     // $db->productitemcode = $request->productitemcode;
+    //     // $db->costprice = $request->costprice;
+    //     // $db->salesprice = $request->salesprice;
+        
+    //     $db->create_by = $create_by;
+    //     $db->save();
+    //     $db->id;
+    //     return redirect('Productlist')->with('message', 'Product  Update Successfully');
+    // }
+    // public function destroys(Product $product, $id)
+    // {
 
-        $d =  PurchaseProduct::where('purchaseid', $id)->get();
-        foreach ($d as $r) {
-            $model = Stock::where('prodctid', $r->productName)->first();
-            $model->decrement('stock_count', $r->quantities);
-            $model->save();
-        }
+    //     Product::where('id', $id)->update([
+    //         'status' => 1
+    //     ]);
+    //     return redirect()->back()
+    //         ->with('message', 'Product  has been deleted successfully');
+    // }
 
-        return redirect()->back()
-            ->with('message', 'Purchase has been deleted successfully');
-    }
+
+    // public function stocklist(Request $request)
+    // {
+    //     $data['userId'] = $userId = $request->get('user') ? $request->get('user') : 0;
+
+    //     if (Auth::user()->usertype == 1) {
+    //         if ($userId != 0)
+    //             $whr['stocks.create_by'] = $userId;
+    //         else
+    //             $whr = [];
+    //     } else
+    //         $whr = array('stocks.create_by' => Auth::user()->id);
+
+    //     $data['users'] = User::where('usertype', 2)->get();
+
+
+    //     // $purchase = Purchase::select('purchases.*', 'users.name')->join('users', 'users.id', 'purchases.create_by')->orderBy('purchases.id')
+    //     $data['stock'] = Stock::select('stocks.*', 'products.productname', 'users.name')
+    //         ->join('users', 'users.id', 'stocks.create_by')
+    //         ->join('products', 'stocks.prodctid', '=', 'products.id')
+    //         ->where($whr)
+    //         ->orderBy('stocks.id')
+    //         ->get();
+
+    //     return view('stocklist', $data);
+    // }
+    // public function stockedit($id)
+    // {
+
+    //     $data['stock'] = Stock::select('stocks.*', 'products.productname')->join('products', 'products.id', 'prodctid')->where('stocks.id', $id)
+    //         ->first();
+    //     return view('stockedit', $data);
+    // }
+    // public function stockUpdate(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'productname' => ['required'],
+    //         'quantity' => ['required'],
+    //     ]);
+    //     $stock = Stock::find($id);
+    //     $stock->stock_count = $request->quantity;
+    //     $stock->prodctid = $request->productname;
+    //     $stock->save();
+
+    //     return redirect('stocklist')->with('message', 'Stock Update Successfully');
+    // }
+    // public function destroye(Stock $stock, $id)
+    // {
+
+    //     Stock::where('id', $id)->delete();
+    //     return redirect()->back()
+    //         ->with('message', 'Stock has been deleted successfully');
+    // }
+    // //purchase add or crud option
+    // //
+    // // addPurchase
+    // public function addPurchase()
+    // {
+
+    //     $data['product'] = Product::orderBy('id')->get();
+    //     if (Auth::user()->usertype != 1) {
+    //         $data['product'] = Product::where('create_by', Auth::user()->id)->orderBy('id')->get();
+    //         $lastId = Purchase::where('create_by', Auth::user()->id)->count();
+    //         $branch = Auth::user()->branch;
+    //         $yr = date('m') . date('y');
+    //         $data['number'] = 'B' . $branch . 'P_' . $yr . '_' . str_pad($lastId + 1, 5, 0, STR_PAD_LEFT);
+    //     } else {
+    //         $lastId = Purchase::where('create_by', Auth::user()->id)->count();
+    //         $branch = Auth::user()->branch;
+    //         $yr = date('m') . date('y');
+    //         $data['number'] = 'B' . $branch . 'P_' . $yr . '_' . str_pad($lastId + 1, 5, 0, STR_PAD_LEFT);
+    //         $data['users'] = User::where('usertype', 2)->get();
+    //     }
+
+    //     return view('addPurchase', $data);
+    // }
+    // public function addPurchaseStore(Request $request)
+    // {
+
+    //     // 
+    //     $request->validate([
+    //         'date' => ['required'],
+    //         // 'invoicenumber' => ['required'],
+    //         'number' => ['required'],
+    //         'suppliername' => ['required', 'string'],
+    //     ]);
+
+    //     if (Auth::user()->usertype == 1)
+    //         $create_by = $request->user;
+    //     else
+    //         $create_by = Auth::user()->id;
+
+    //     $db = new Purchase();
+    //     $db->date = $request->date;
+    //     $db->invoicenumber = $request->invoicenumber;
+    //     $db->number = $request->number;
+    //     $db->suppliername = $request->suppliername;
+    //     $db->create_by = $create_by;
+    //     $db->save();
+    //     $db->id;
+    //     foreach ($request->productName as $key => $productName) {
+    //         if ($productName != '') {
+    //             $purchase = new PurchaseProduct();
+    //             $purchase->productName = $productName;
+    //             $purchase->purchaseid = $db->id;
+    //             $purchase->quantities = $request->quantities[$key];
+    //             // $purchase->costpriceid = $request->costpriceid;
+    //             // $purchase->itemcodeid = $request->itemcodeid;
+    //             $purchase->create_by = Auth::user()->id;
+    //             $purchase->save();
+    //             $model = Stock::where('prodctid', $productName)->first();
+    //             $model->increment('stock_count', $request->quantities[$key]);
+    //             $model->save();
+    //         }
+    //     }
+
+    //     return redirect('purchaselist')->with('message', 'Purchase Added Successfully');
+    // }
+
+    // public function purchaselist(Request $request)
+    // {
+    //     $userId = $userId = $request->get('user') ? $request->get('user') : 0;
+
+    //     if (Auth::user()->usertype == 1) {
+    //         if ($userId != 0)
+    //             $whr['create_by'] = $userId;
+    //         else
+    //             $whr = [];
+    //     } else
+    //         $whr = array('purchases.create_by' => Auth::user()->id);
+    //     $users = User::where('usertype', 2)->get();
+    //     $purchase = Purchase::select('purchases.*', 'users.name')->join('users', 'users.id', 'purchases.create_by')->orderBy('purchases.id')
+    //         ->where($whr)
+    //         ->where('status', 0)
+    //         ->get();
+    //     $cnt = Purchase::join('users', 'users.id', 'purchases.create_by')
+    //         ->where($whr)
+    //         ->where('status', 0)
+    //         ->count();
+
+    //     if ($cnt % 10 == 0) {
+    //         $count = $cnt / 10;
+    //     } else {
+    //         $a = $cnt % 10;
+    //         $b = $cnt - $a;
+    //         $count = ($b / 10) + 1;
+    //     }
+    //     $data = array();
+    //     foreach ($purchase as $row) {
+    //         $row['product'] = PurchaseProduct::join('products', 'products.id', 'purchase_products.productName')->where('purchaseid', $row->id)
+    //             ->get();
+    //         array_push($data, $row);
+    //     }
+    //     return view('purchaselist', compact('data', 'userId', 'users', 'count'));
+    // }
+    // public function Purchaseedit($id)
+    // {
+    //     $data['purchase'] = $pr = Purchase::where('id', $id)
+    //         ->first();
+    //     $data['product'] = Product::where('create_by', $pr->create_by)->orderBy('id')->get();
+    //     $data['purchaseproduct'] = PurchaseProduct::where('purchaseid', $id)->get();
+
+
+    //     if (Auth::user()->usertype == 1) {
+    //         $data['users'] = User::where('usertype', 2)->get();
+    //     }
+    //     return view('Purchaseedit', $data);
+    // }
+    // // Purchaseedit
+    // public function purchaseUpdate(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'date' => ['required'],
+    //         // 'invoicenumber' => ['required'],
+    //         'number' => ['required'],
+    //         'suppliername' => ['required', 'string'],
+    //     ]);
+
+    //     $db = Purchase::find($id);
+    //     $db->date = $request->date;
+    //     $db->invoicenumber = $request->invoicenumber;
+    //     $db->number = $request->number;
+    //     $db->suppliername = $request->suppliername;
+    //     $db->save();
+
+    //     $d =  PurchaseProduct::where('purchaseid', $id)->get();
+    //     foreach ($d as $r) {
+    //         $model = Stock::where('prodctid', $r->productName)->first();
+    //         $model->decrement('stock_count', $r->quantities);
+    //         $model->save();
+    //     }
+    //     PurchaseProduct::where('purchaseid', $id)->delete();
+
+    //     foreach ($request->productName as $key => $productName) {
+    //         if ($productName != '') {
+    //             $purchase = new PurchaseProduct();
+    //             $purchase->productName = $productName;
+    //             $purchase->purchaseid = $id;
+    //             $purchase->quantities = $request->quantities[$key];
+    //             $purchase->create_by = Auth::user()->id;
+    //             $purchase->save();
+    //             $model = Stock::where('prodctid', $productName)->first();
+    //             $model->increment('stock_count', $request->quantities[$key]);
+    //             $model->save();
+    //         }
+    //     }
+    //     return redirect('purchaselist')->with('message', 'Purchase Update Successfully');
+    // }
+    // public function destro(Purchase $purchase, $id)
+    // {
+    //     Purchase::where('id', $id)->update([
+    //         'status' => 1
+    //     ]);
+
+    //     $d =  PurchaseProduct::where('purchaseid', $id)->get();
+    //     foreach ($d as $r) {
+    //         $model = Stock::where('prodctid', $r->productName)->first();
+    //         $model->decrement('stock_count', $r->quantities);
+    //         $model->save();
+    //     }
+
+    //     return redirect()->back()
+    //         ->with('message', 'Purchase has been deleted successfully');
+    // }
     //sale crud option
     public function addsale()
     {
@@ -663,50 +679,50 @@ class HomeController extends Controller
     {
         return  Stock::where('prodctid', $id)->pluck('stock_count');
     }
-    public function purchasereport(Request $request)
-    {
-        $userId = $userId = $request->get('user') ? $request->get('user') : 0;
+    // public function purchasereport(Request $request)
+    // {
+    //     $userId = $userId = $request->get('user') ? $request->get('user') : 0;
 
-        if (Auth::user()->usertype == 1) {
-            if ($userId != 0)
-                $whr['create_by'] = $userId;
-            else
-                $whr = [];
-        } else
-            $whr = array('purchases.create_by' => Auth::user()->id);
+    //     if (Auth::user()->usertype == 1) {
+    //         if ($userId != 0)
+    //             $whr['create_by'] = $userId;
+    //         else
+    //             $whr = [];
+    //     } else
+    //         $whr = array('purchases.create_by' => Auth::user()->id);
 
-        $users = User::where('usertype', 2)->get();
-
-
+    //     $users = User::where('usertype', 2)->get();
 
 
-        $purchase = Purchase::select('purchases.*', 'users.name')->join('users', 'users.id', 'purchases.create_by')->orderBy('purchases.id')
-            ->where($whr)
-            ->where('status', 0)
-            ->get();
 
-        $cnt = Purchase::join('users', 'users.id', 'purchases.create_by')
-            ->where($whr)
-            ->where('status', 0)
-            ->count();
 
-        if ($cnt % 10 == 0) {
-            $count = $cnt / 10;
-        } else {
-            $a = $cnt % 10;
-            $b = $cnt - $a;
-            $count = ($b / 10) + 1;
-        }
+    //     $purchase = Purchase::select('purchases.*', 'users.name')->join('users', 'users.id', 'purchases.create_by')->orderBy('purchases.id')
+    //         ->where($whr)
+    //         ->where('status', 0)
+    //         ->get();
 
-        $data = array();
+    //     $cnt = Purchase::join('users', 'users.id', 'purchases.create_by')
+    //         ->where($whr)
+    //         ->where('status', 0)
+    //         ->count();
 
-        foreach ($purchase as $row) {
-            $row['product'] = PurchaseProduct::join('products', 'products.id', 'purchase_products.productName')->where('purchaseid', $row->id)
-                ->get();
-            array_push($data, $row);
-        }
-        return view('purchasereport', compact('data', 'userId', 'users', 'count'));
-    }
+    //     if ($cnt % 10 == 0) {
+    //         $count = $cnt / 10;
+    //     } else {
+    //         $a = $cnt % 10;
+    //         $b = $cnt - $a;
+    //         $count = ($b / 10) + 1;
+    //     }
+
+    //     $data = array();
+
+    //     foreach ($purchase as $row) {
+    //         $row['product'] = PurchaseProduct::join('products', 'products.id', 'purchase_products.productName')->where('purchaseid', $row->id)
+    //             ->get();
+    //         array_push($data, $row);
+    //     }
+    //     return view('purchasereport', compact('data', 'userId', 'users', 'count'));
+    // }
     public function salereport(Request $request)
     {
         $userId = $userId = $request->get('user') ? $request->get('user') : 0;
@@ -748,27 +764,27 @@ class HomeController extends Controller
         }
         return view('salereport', compact('data', 'userId', 'users', 'count','from','to'));
     }
-    public function stockreport(Request $request)
-    {
-        $data['userId'] = $userId = $request->get('user') ? $request->get('user') : 0;
+    // public function stockreport(Request $request)
+    // {
+    //     $data['userId'] = $userId = $request->get('user') ? $request->get('user') : 0;
 
-        if (Auth::user()->usertype == 1) {
-            if ($userId != 0)
-                $whr['stocks.create_by'] = $userId;
-            else
-                $whr = [];
-        } else
-            $whr = array('stocks.create_by' => Auth::user()->id);
-        $data['users'] = User::where('usertype', 2)->get();
-        // $purchase = Purchase::select('purchases.*', 'users.name')->join('users', 'users.id', 'purchases.create_by')->orderBy('purchases.id')
-        $data['stock'] = Stock::select('stocks.*', 'products.productname', 'users.name')
-            ->join('users', 'users.id', 'stocks.create_by')
-            ->join('products', 'stocks.prodctid', '=', 'products.id')
-            ->where($whr)
-            ->orderBy('stocks.id')
-            ->get();
-        return view('stockreport', $data);
-    }
+    //     if (Auth::user()->usertype == 1) {
+    //         if ($userId != 0)
+    //             $whr['stocks.create_by'] = $userId;
+    //         else
+    //             $whr = [];
+    //     } else
+    //         $whr = array('stocks.create_by' => Auth::user()->id);
+    //     $data['users'] = User::where('usertype', 2)->get();
+    //     // $purchase = Purchase::select('purchases.*', 'users.name')->join('users', 'users.id', 'purchases.create_by')->orderBy('purchases.id')
+    //     $data['stock'] = Stock::select('stocks.*', 'products.productname', 'users.name')
+    //         ->join('users', 'users.id', 'stocks.create_by')
+    //         ->join('products', 'stocks.prodctid', '=', 'products.id')
+    //         ->where($whr)
+    //         ->orderBy('stocks.id')
+    //         ->get();
+    //     return view('stockreport', $data);
+    // }
     //item add
     public function Additem()
     {

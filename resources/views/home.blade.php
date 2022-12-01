@@ -47,7 +47,7 @@ $current_page = 'Dashboard';
             <div class="col-md-3 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <p class="card-title text-md-center text-xl-left">Number of Product</p>
+                        <p class="card-title text-md-center text-xl-left">Number of Item</p>
                         <div
                             class="d-flex flex-wrap justify-content-between justify-content-md-center justify-content-xl-between align-items-center">
 
@@ -60,7 +60,7 @@ $current_page = 'Dashboard';
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 grid-margin stretch-card">
+            {{-- <div class="col-md-3 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <p class="card-title text-md-center text-xl-left">Number of Purchase</p>
@@ -75,7 +75,7 @@ $current_page = 'Dashboard';
 
                     </div>
                 </div>
-            </div>
+            </div> --}}
             <div class="col-md-3 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
@@ -100,13 +100,13 @@ $current_page = 'Dashboard';
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Stock List</h4>
+                        <h4 class="card-title">Sale List</h4>
                         @if (session()->has('message'))
                             <div class="alert alert-success">
                                 {{ session()->get('message') }}
                             </div>
                         @endif
-                        <div>
+                        <div class="col-md-2">
                             @if (Auth::user()->usertype == 1)
                                 <form action="" method="GET">
                                     <select class="form-control2" name="user" onchange="this.form.submit()">
@@ -120,47 +120,106 @@ $current_page = 'Dashboard';
                             @endif
                         </div>
                         <div class="table-responsive pt-3">
-                            <table id="example" class="table table-striped table-bordered table-hover dataTables-example">
+                             <form method="get" class="form-horizontal">
+                                        @csrf
+                                        <h5 style="display: flex;" >
+                                        <div><label>Date From</label>
+
+                                            <div style="margin-left: 3px;"><input type="date" required 
+                                                name="fromDate" value="{{ $from }}"
+                                           onchange="this.form.submit()" autocomplete="dob">
+                                       </div>
+                                       
+                                        </div><br>
+                                        <div><label >Date To</label>
+
+                                            <div style="margin-left: 3px;" ><input type="date" required name="toDate" value="{{ $to }}"
+                                                onchange="this.form.submit()" autocomplete="dob">
+                                        </div>
+                                        </div><br>
+                                        </h5>
+                                       
+                                       
+                                    </form>
+                            <table id="example"class="table table-striped table-bordered table-hover dataTables-example">
                                 <thead>
                                     <tr>
                                         <th> #</th>
                                         @if (Auth::user()->usertype == 1)
                                             <th>Branch</th>
                                         @endif
-                                        <th>Product Name</th>
-                                        <th>Stock count</th>
+                                        <th>Sale number</th>
+                                        <th>Customer Name</th>
+                                        <th>Sale Date</th>
+                                        <th style="text-align: center">Product Details</th>
+                                        <th>Action</th>
                                     </tr>
+
                                 </thead>
                                 <tbody>
+                                    <tr>
+                                        <th> </th>
+                                        @if (Auth::user()->usertype == 1)
+                                            <th></th>
+                                        @endif
+                                        <th></th>
+                                        <th></th>
+                                        <th></th>
+                                        <th><span style="float: left;">Product Name</span>&nbsp; &nbsp; &nbsp; &nbsp;<span style="float: center;">Price</span>&nbsp; &nbsp; &nbsp; &nbsp; <span >Tax Rate</span>  <span style="float: right;">QTY</span></th>
+                                        <th></th>
+                                    </tr>
                                     @php
                                         $cnt = 1;
                                     @endphp
-                                     @if (count($stock) > 0)
-                                    @foreach ($stock as $stocks)
-                                        <tr>
-                                            <td>{{ $cnt++ }}</td>
-                                            @if (Auth::user()->usertype == 1)
-                                                <td>{{ $stocks->name }}</td>
-                                            @endif
+                                    @if (count($data) > 0)
+                                        @foreach ($data as $sales)
+                                            <tr>
+                                                <td>{{ $cnt++ }}</td>
+                                                @if (Auth::user()->usertype == 1)
+                                                    <td>{{ $sales->name }}</td>
+                                                @endif
+                                                <td>{{ $sales->number }}</td>
+                                                <td>{{ $sales->suppliername }}</td>
+                                                <td>{{ $sales->created_at }}</td>
+                                                <td>
+                                                    @foreach ($sales->product as $item)
+                                                        <p>
+                                                            <span style="float: left;padding-right: 17%;">{{ $item->itemname }}</span>
+                                                            <span
+                                                                style="float: right;padding-right: 0%;">{{ $item->quantities }}</span>
+                                                                <span style="float: left;padding-right: 7%;">{{ $item->price_id }}</span>
+                                                                <span >{{ $item->tax_id }}</span>
+                                                        </p>
+                                                    @endforeach
+                                                </td>
+                                                <td>
+                                                    <h3 style="display: flex;">
+                                                        <a href="{{ url('saleedit', $sales->id) }}"
+                                                            style="margin-left:3%;margin-right:3%;border:none;color:green;"><i
+                                                                class="fas fa-edit"></i></a>
+                                                        <form action="{{ url('saledestroy', $sales->id) }}" method="post">
+                                                            @csrf
+                                                            @method('DELETE')
+                                                            <button
+                                                                type="submit"style="border:none; color: red;background-color: Transparent;
+                                                            background-repeat:no-repeat;"
+                                                                onclick="return confirm('Are you sure?')"><i
+                                                                    class="fas fa-trash"></i></button>
+                                                        </form>
+                                                    </h3>
+                                                </td>
 
-                                            <td>{{ $stocks->productname }}</td>
-                                            <td>{{ $stocks->stock_count }}</td>
 
 
-                                        </tr>
-                                    @endforeach
+                                            </tr>
+                                        @endforeach
                                     @else
-                                    <tr>
-                                        <td colspan="7">No Data</td>
-                                    </tr>
-                                @endif
-
-
+                                        <tr>
+                                            <td colspan="8">No Data</td>
+                                        </tr>
+                                    @endif
                                 </tbody>
-
                             </table>
-                            <br>
-                            {{-- {{$stock->links()}} --}}
 
                         </div>
                     </div>

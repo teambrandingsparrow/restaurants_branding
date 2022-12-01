@@ -30,7 +30,7 @@ $current_page = 'Sale';
     </style>
 @endsection
 <?php
-$title = 'User LIst | Mr:Rocks';
+$title = 'User LIst |';
 ?>
 @section('content')
     <div class="content-wrapper">
