@@ -56,7 +56,7 @@ $title = 'Add User | Mr:Rocks';
                                     </label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <select class="form-control2" required name="quantitytype">
+                                    <select class="form-control2" required name="quantitytype" required>
                                         <option value=""> Please Select</option>
                                         @foreach ($qtytype as $Row)
                                             <option value="{{ $Row->id }}">{{ $Row->quantityTypes }}</option>
@@ -70,7 +70,7 @@ $title = 'Add User | Mr:Rocks';
                                 </div>
                                 <div class="col-lg-8">
                                     <input class="form-control" name="itemname" type="text"
-                                        value="{{ old('itemname') }}"placeholder="Enter Item Name">
+                                        value="{{ old('itemname') }}"placeholder="Enter Item Name" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -79,7 +79,7 @@ $title = 'Add User | Mr:Rocks';
                                 </div>
                                 <div class="col-lg-8">
                                     <input class="form-control" name="itemcode" type="text"
-                                        value="{{ old('itemcode') }}"placeholder="Enter Item Code">
+                                        value="{{ old('itemcode') }}"placeholder="Enter Item Code" required>
                                 </div>
                             </div><div class="form-group row">
                                 <div class="col-lg-3">
@@ -87,7 +87,7 @@ $title = 'Add User | Mr:Rocks';
                                 </div>
                                 <div class="col-lg-8">
                                     <input class="form-control" name="quantity" type="text"
-                                        value="{{ old('quantity') }}"placeholder="Enter Quantity">
+                                        value="{{ old('quantity') }}"placeholder="Enter Quantity" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -96,7 +96,7 @@ $title = 'Add User | Mr:Rocks';
                                 </div>
                                 <div class="col-lg-8">
                                     <input class="form-control" name="price" type="number"
-                                        value="{{ old('price') }}"placeholder="Enter Price ">
+                                        value="{{ old('price') }}"placeholder="Enter Price " required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -105,7 +105,7 @@ $title = 'Add User | Mr:Rocks';
                                 </div>
                                 <div class="col-lg-8">
                                     <input class="form-control" name="taxrate" type="number"
-                                        value="{{ old('taxrate') }}"placeholder="Enter Tax Rate">
+                                        value="{{ old('taxrate') }}"placeholder="Enter Tax Rate" required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -114,7 +114,7 @@ $title = 'Add User | Mr:Rocks';
                                 </div>
                                 <div class="col-lg-8">
                                     <input class="form-control" name="file" type="file"
-                                       placeholder="Upload image" style="background-color:none;important">
+                                       placeholder="Upload image" style="background-color:none;important" required>
                                 </div>
                             </div>
                             <center><button type="submit"style="background-color:black;border-radius:10px;"

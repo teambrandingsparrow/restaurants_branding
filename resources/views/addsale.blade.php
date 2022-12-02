@@ -37,19 +37,7 @@ $title = 'Add User | Mr:Rocks';
                             <div class="row">
                                 {{-- <div class="col-sm-12 b-r"> --}}
                                 <div class="col-md-4">
-                                    {{-- @if (Auth::user()->usertype == 1)
-                                        <div class="col-md-12">
-                                            <label class="col-form-label">Select Branch<span
-                                                    style="color: red;">*</span></label>
-                                            <select class="form-control2" onchange="getproduct(this)" required
-                                                name="user">
-                                                <option value="">Select Branch</option>
-                                                @foreach ($users as $item)
-                                                    <option value="{{ $item->id }}">{{ $item->name }}</option>
-                                                @endforeach
-                                            </select>
-                                        </div>
-                                    @endif --}}
+                                  
                                     <div class="col-md-12 ">
                                         <label class="col-form-label">Date <span style="color: red;">*</span></label>
                                         <input class="form-control" required id="datepicker" name="date" type="date"
