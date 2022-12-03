@@ -33,7 +33,7 @@ class HomeController extends Controller
     public function getItem($id)
     {
         $prd =  Items::where('id', $id)->first();
-        return json_encode(array('item' => $prd->id, 'salesPrice' => $prd->price, 'qty' => $prd->quantity, 'taxs'=>$prd->taxrate,'img'=>$prd->file_path));
+        return json_encode(array('item' => $prd->id, 'salesPrice' => $prd->price, 'qty' => $prd->quantity, 'taxs'=>$prd->taxrate,'img'=>$prd->file_path,'total'=>$prd->price*$prd->quantity));
     }
 
 
