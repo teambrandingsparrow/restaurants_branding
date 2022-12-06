@@ -11,7 +11,7 @@ $title = 'Add User | Mr:Rocks';
             <div class="col-12">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Product Category Add</h4>
+                        <h4 class="card-title">Product Add</h4>
                         @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>
@@ -75,30 +75,23 @@ $title = 'Add User | Mr:Rocks';
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-3">
-                                    <label class="col-form-label"> Item Code<span style="color: red;">*</span></label>
-                                </div>
-                                <div class="col-lg-8">
-                                    <input class="form-control" name="itemcode" type="text"
-                                        value="{{ old('itemcode') }}"placeholder="Enter Item Code" required>
-                                </div>
-                            </div><div class="form-group row">
-                                <div class="col-lg-3">
                                     <label class="col-form-label"> Quantity  <span style="color: red;">*</span></label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input class="form-control" name="quantity" type="text"
+                                    <input class="form-control" name="quantity" id="qty_1" type="text"
                                         value="{{ old('quantity') }}"placeholder="Enter Quantity" required>
                                 </div>
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-3">
-                                    <label class="col-form-label"> Price <span style="color: red;">*</span></label>
+                                    <label class="col-form-label">Individual Price <span style="color: red;">*</span></label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input class="form-control" name="price" type="number"
+                                    <input class="form-control" name="price" id="price_1" type="number"
                                         value="{{ old('price') }}"placeholder="Enter Price " required>
                                 </div>
                             </div>
+                           
                             <div class="form-group row">
                                 <div class="col-lg-3">
                                     <label class="col-form-label"> Tax Rate <span style="color: red;">*</span></label>
@@ -108,6 +101,16 @@ $title = 'Add User | Mr:Rocks';
                                         value="{{ old('taxrate') }}"placeholder="Enter Tax Rate" required>
                                 </div>
                             </div>
+                           
+                            <div class="form-group row">
+                                <div class="col-lg-3">
+                                    <label class="col-form-label"> Item Code<span style="color: red;">*</span></label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input class="form-control" name="itemcode" type="text"
+                                        value="{{ old('itemcode') }}"placeholder="Enter Item Code" required>
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <div class="col-lg-3">
                                     <label class="col-form-label"> Image <span style="color: red;">*</span></label>
@@ -115,6 +118,15 @@ $title = 'Add User | Mr:Rocks';
                                 <div class="col-lg-8">
                                     <input class="form-control" name="file" type="file"
                                        placeholder="Upload image" style="background-color:none;important" required>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-3">
+                                    <label class="col-form-label"> Total Amount <span style="color: red;">*</span></label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input class="form-control" name="totalamount" id="total_1" type="number"
+                                    placeholder="Total Amount"  required>
                                 </div>
                             </div>
                             <center><button type="submit"style="background-color:black;border-radius:10px;"
@@ -130,4 +142,9 @@ $title = 'Add User | Mr:Rocks';
 
 
     </div>
+
+
+
+
 @endsection
+

@@ -80,7 +80,7 @@ $title = 'User LIst |';
                                        
                                        
                                     </form>
-                            <table id="example"class="table table-striped table-bordered table-hover dataTables-example">
+                            <table id="example"class="table table-bordered table-bordered table-hover dataTables-example">
                                 <thead>
                                     <tr>
                                         <th> #</th>

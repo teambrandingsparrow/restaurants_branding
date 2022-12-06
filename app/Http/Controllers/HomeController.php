@@ -33,7 +33,7 @@ class HomeController extends Controller
     public function getItem($id)
     {
         $prd =  Items::where('id', $id)->first();
-        return json_encode(array('item' => $prd->id, 'salesPrice' => $prd->price, 'qty' => $prd->quantity, 'taxs'=>$prd->taxrate,'img'=>$prd->file_path,'total'=>$prd->price*$prd->quantity));
+        return json_encode(array('item' => $prd->id, 'salesPrice' => $prd->price, 'qty' => $prd->quantity, 'taxs'=>$prd->taxrate,'img'=>$prd->file_path));
     }
 
 
@@ -359,7 +359,7 @@ class HomeController extends Controller
             $db->file = $fileName;
             $db->file_path = '/uploads/' . $fileName;
         }
-    
+       $db->totalamount=$request->totalamount;
         $db->save();
         $db->id;
         $stock = new Stock();
@@ -400,6 +400,7 @@ class HomeController extends Controller
             $db->file = $fileName;
             $db->file_path = '/uploads/' . $fileName;
         }
+        $db->totalamount=$request->totalamount;
         $db->save();
         return redirect('Itemlist')->with('message', 'Update Successfully');
     }
@@ -447,7 +448,8 @@ class HomeController extends Controller
     public function demo()
     {
         $data['item'] = Items::orderBy('id')->get();
-        $data['items'] = Items::get();
+        $data['items'] = Items::where('items.status', 0)
+        ->get();
         // $data['product'] = Product::orderBy('id')->get();
         if (Auth::user()->usertype != 1) {
             $data['product'] = Product::where('create_by', Auth::user()->id)->orderBy('id')->get();
@@ -462,7 +464,7 @@ class HomeController extends Controller
             $data['number'] = 'B' . $branch . 'P_' . $yr . '_' . str_pad($lastId + 1, 5, 0, STR_PAD_LEFT);
             $data['users'] = User::where('usertype', 2)->get();
         }
-        
+      
         return view('demo',$data);
     }
 

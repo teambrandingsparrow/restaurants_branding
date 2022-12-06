@@ -86,7 +86,7 @@ $title = 'Item Edit | ERP Bangalore';
                                     <label class="col-form-label"> Quantity  <span style="color: red;">*</span></label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input class="form-control" name="quantity" type="text"
+                                    <input class="form-control" name="quantity"id="qty_1" type="text"
                                     value="{{$item->quantity}}"placeholder="Enter Quantity">
                                 </div>
                             </div>
@@ -95,7 +95,7 @@ $title = 'Item Edit | ERP Bangalore';
                                     <label class="col-form-label"> Price <span style="color: red;">*</span></label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input class="form-control" name="price" type="text"
+                                    <input class="form-control" name="price"id="price_1" type="text"
                                     value="{{$item->price}}"placeholder="Enter Price ">
                                 </div>
                             </div>
@@ -118,7 +118,15 @@ $title = 'Item Edit | ERP Bangalore';
                                        <img src="{{ $item->file_path }}" alt="" style="width:50px;height:50px;"
                                        srcset="">
                                 </div>
-                              
+                                <div class="form-group row">
+                                    <div class="col-lg-3">
+                                        <label class="col-form-label">Total Amount <span style="color: red;">*</span></label>
+                                    </div>
+                                    <div class="col-lg-8">
+                                        <input class="form-control" id="total_1"  name="totalamount" type="text"
+                                        value="{{$item->totalamount}}"placeholder="Total Amount">
+                                    </div>
+                                </div>
                             </div>
                             <center><button type="submit"style="background-color:black;border-radius:10px;"
                                     class="btn btn-primary">Update</button>

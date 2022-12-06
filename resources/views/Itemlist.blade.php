@@ -36,7 +36,7 @@ $current_page = 'Product';
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Product List</h4>
+                        <h4 class="card-title">Product List</h4><br>
                         @if (session()->has('message'))
                             <div class="alert alert-success">
                                 {{ session()->get('message') }}
@@ -70,6 +70,7 @@ $current_page = 'Product';
                                         <th> quantityTypes </th>
                                         <th> taxrate </th>
                                         <th>Image</th>
+                                        <th>Total</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>
@@ -92,6 +93,7 @@ $current_page = 'Product';
                                             <td>{{ $item->taxrate }}</td>
                                             <td><img src="{{ $item->file_path }}" width="50" alt=""
                                                 srcset=""></td>
+                                            <td>{{ $item->totalamount }}</td>
                                             <td>
                                                 <h3 style="display: flex;">
                                                     {{-- class="btn btn-primary" --}}

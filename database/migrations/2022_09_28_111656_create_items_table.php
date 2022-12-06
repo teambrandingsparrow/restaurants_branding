@@ -24,6 +24,7 @@ return new class extends Migration
             $table->integer('status')->default(0);
             $table->string('file');
             $table->string('file_path');
+            $table->string('totalamount');
             $table->timestamps();
         });
     }
