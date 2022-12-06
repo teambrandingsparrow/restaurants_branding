@@ -31,6 +31,16 @@ $today = $year . '-' . $month . '-' . $day;
  <link rel="stylesheet" href="plugins/summernote/summernote-bs4.css">
  <!-- Google Font: Source Sans Pro -->
  <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+ <style>
+  #tbody td{
+    text-align: center;
+  }
+  #tbody input{
+    padding: 8px;
+    border: none;
+    width: 100px;
+  } 
+ </style>
 @endsection
 @section('content')
 <section class="content">
@@ -48,15 +58,15 @@ $today = $year . '-' . $month . '-' . $day;
                   <th >Price</th>
                   <th >Tax</th>
                   <th >Net Total</th>
-                  <th >demo</th>
+                  {{-- <th >demo</th> --}}
                 </tr>
               </thead>
               @php
               $cnt = 1;
           @endphp
-              <tbody>
+              <tbody id="tbody">
                 <tr id="tb">
-                  <td style="vertical-align: top;important;">{{$cnt++}}</td>
+                  {{-- <td style="vertical-align: top;important;">{{$cnt++}}</td>
                   <td><select  class="form-control2 prds" onchange="getStock(this)" required
                     name="productName[]" style="border:none;background-color:  var(--bs-table-bg);width:100px;">
                     <option value="">Select</option>
@@ -71,15 +81,11 @@ $today = $year . '-' . $month . '-' . $day;
                   <td><input style="border:none;background-color:  var(--bs-table-bg);width:100px;" class="form-control tax" name="tax_id[]" 
                     type="number" placeholder="Tax" id="tax" ></td>
                   <td><input style="border:none;background-color:  var(--bs-table-bg);width:100px;" class="form-control tamt" name="total[]" 
-                    type="number" placeholder="Total" id="total"></td>
-                    <td>
-                        <button
-                        id="btn"type="button"style="background-color:black;border-radius:10px;margin-top:38%"
-                        class="btn btn-primary">+</button>
-                    </td>
+                    type="number" placeholder="Total" id="total"></td> --}}
+                   
                 </tr>
-                <tr hidden id="rr">
-                  <td style="vertical-align: top;important;">{{$cnt++}}</td>
+                {{-- <tr hidden id="rr"> --}}
+                  {{-- <td style="vertical-align: top;important;">{{$cnt++}}</td>
                   <td><select  class="form-control2 prds" onchange="getStock(this)" required
                     name="productName[]" style="border:none;background-color:  var(--bs-table-bg);width:100px;">
                     <option value="">Select</option>
@@ -94,13 +100,10 @@ $today = $year . '-' . $month . '-' . $day;
                   <td><input style="border:none;background-color:  var(--bs-table-bg);width:100px;" class="form-control tax" name="tax_id[]" 
                     type="number" placeholder="Tax" id="tax" ></td>
                   <td><input style="border:none;background-color:  var(--bs-table-bg);width:100px;" class="form-control tamt" name="total[]" 
-                    type="number" placeholder="Total" id="total"></td>
+                    type="number" placeholder="Total" id="total"></td> --}}
 
-                    <td>
-                         <button onclick="remove(this)"
-                        type="button"style="background-color:black;border-radius:10px;margin-top:38%"
-                        class="btn btn-primary">-</button></td>
-                </tr>
+                  
+                {{-- </tr> --}}
                 
                 
                
@@ -145,7 +148,7 @@ $today = $year . '-' . $month . '-' . $day;
        
         <div class="row"style="margin-left: 70px;importantant">
           @foreach ($items as $item)
-          <div class="col-6 col-sm-6 col-md-3 col-lg-3 mt-2">
+          <div data-itemname={{$item->itemname}} data-price={{$item->price}} data-tax={{$item->taxrate}} class="col-6 col-sm-6 col-md-3 col-lg-3 mt-2 storeitem">
           
             <div class="card p-0 m-0" >
               <div class="card-body p-0 m-0 b-0">
@@ -181,14 +184,41 @@ $today = $year . '-' . $month . '-' . $day;
 @endsection
 @section('script')
     <script>
+
         $(document).ready(function() {
+          
+          var count = 0;
+          $('.storeitem').on('click',function(){
+            count++;
+            var item = $(this).attr('data-itemname');
+            var price = $(this).attr('data-price');
+            var tax = $(this).attr('data-tax');
+            $('#tbody').append('<tr><td>'+count+'</td><td>'+item+'</td><td><input type="number" value="1" class="qntyitem" onChange="gettotal()" /></td><td class="priceitem">'+price+'</td><td>'+tax+'</td><td class="nettotalitem">'+price+'</td></tr>');
+            // gettotal();
+          })
+            function gettotal(){
+            var qnty = $(this).val();
+            var itempr = $(this).closest('.priceitem').html()
+            var total = qnty * itempr;
+            $('.nettotalitem').html(total); 
+         
+           }
+          // $('.qntyitem').on('keyup mouseup', function(){
+           
+          //   var qnty = $(this).val();
+           
+          //   var itempr = $(this).closest('.priceitem').html()
+          //   var total = qnty * itempr;
+           
+          //  $('.nettotalitem').html(total);
+          // })
             $("#btn").click(function() {
                 $(".prds option").each(function(i) {
                     if ($(this).is(':selected') && $(this).val() != '') {
                         $("#prds option[value='" + $(this).val() + "']").attr('disabled', true);
                     }
                 });
-                var row = $("#rr").clone().appendTo("#tb");
+                var row = $("#rr").clone().insertAfter("#tb");
                 row.removeAttr('hidden');
                 row.find('select').attr('required', true);
                 row.find('input').attr('required', true);
