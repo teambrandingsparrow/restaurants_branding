@@ -97,7 +97,7 @@ $title = 'Add User | Mr:Rocks';
                                     <label class="col-form-label"> Tax Rate <span style="color: red;">*</span></label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <input class="form-control" name="taxrate" type="number"
+                                    <input class="form-control" name="taxrate" id="tax_1" type="number"
                                         value="{{ old('taxrate') }}"placeholder="Enter Tax Rate" required>
                                 </div>
                             </div>
@@ -108,7 +108,7 @@ $title = 'Add User | Mr:Rocks';
                                 </div>
                                 <div class="col-lg-8">
                                     <input class="form-control" name="itemcode" type="text"
-                                        value="{{ old('itemcode') }}"placeholder="Enter Item Code" required>
+                                       placeholder="Enter Item Code" value="{{$number}}"  required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -120,7 +120,7 @@ $title = 'Add User | Mr:Rocks';
                                        placeholder="Upload image" style="background-color:none;important" required>
                                 </div>
                             </div>
-                            <div class="form-group row">
+                            {{-- <div class="form-group row">
                                 <div class="col-lg-3">
                                     <label class="col-form-label"> Total Amount <span style="color: red;">*</span></label>
                                 </div>
@@ -128,7 +128,7 @@ $title = 'Add User | Mr:Rocks';
                                     <input class="form-control" name="totalamount" id="total_1" type="number"
                                     placeholder="Total Amount"  required>
                                 </div>
-                            </div>
+                            </div> --}}
                             <center><button type="submit"style="background-color:black;border-radius:10px;"
                                     class="btn btn-primary">Add</button>
                                 <button type="reset"

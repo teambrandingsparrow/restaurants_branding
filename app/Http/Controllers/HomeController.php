@@ -127,10 +127,10 @@ class HomeController extends Controller
             $yr = date('m') . date('y');
             $data['number'] = 'B' . $branch . 'S_' . $yr . '_' . str_pad($lastId + 1, 5, 0, STR_PAD_LEFT);
         } else {
-            $lastId = Purchase::where('create_by', Auth::user()->id)->count();
-            $branch = Auth::user()->branch;
+            $lastId = Items::count();
+           
             $yr = date('m') . date('y');
-            $data['number'] = 'B' . $branch . 'P_' . $yr . '_' . str_pad($lastId + 1, 5, 0, STR_PAD_LEFT);
+            $data['number'] = 'P_' . $yr . '_' . str_pad($lastId + 1, 5, 0, STR_PAD_LEFT);
             $data['users'] = User::where('usertype', 2)->get();
         }
         return view('addsale', $data);
@@ -341,6 +341,9 @@ class HomeController extends Controller
    
     public function Additem()
     {
+        $lastId = Items::count();
+        $yr = date('m') . date('y');
+        $data['number'] = 'P_' . $yr . '_' . str_pad($lastId + 1, 5, 0, STR_PAD_LEFT);
         $data['qtytype']=QuantityType::get();
         return view('Additem',$data);
     }
@@ -359,14 +362,14 @@ class HomeController extends Controller
             $db->file = $fileName;
             $db->file_path = '/uploads/' . $fileName;
         }
-       $db->totalamount=$request->totalamount;
+     
         $db->save();
-        $db->id;
-        $stock = new Stock();
-        $stock->stock_count = $request->quantity;
-        $stock->prodctid = $db->id;
-        $stock->create_by = Auth::user()->id;
-        $stock->save();
+        // $db->id;
+        // $stock = new Stock();
+        // $stock->stock_count = $request->quantity;
+        // $stock->prodctid = $db->id;
+        // $stock->create_by = Auth::user()->id;
+        // $stock->save();
         return back()->with('message', 'Product  Added Successfully');
     }
     public function Itemlist(Request $request)

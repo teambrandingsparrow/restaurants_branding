@@ -63,15 +63,15 @@
     <script src="{{ asset('js/dataTables.bootstrap4.js.download') }}"></script>
     <script src="{{ asset('js/data-table.js.download') }}"></script>
     <!-- End custom js for this page-->
-    <script>
+    {{-- <script>
        $('#price_1, #qty_1').keyup(function(){
     var price = parseFloat($('#price_1').val());
     var qty = parseFloat($('#qty_1').val());
 
-    $('#total_1').val(price * qty );
+    $('#total_1').val(price * qty% );
 });
     
-    </script>
+    </script> --}}
     @yield('script')
 
 

@@ -10,82 +10,162 @@ $today = $year . '-' . $month . '-' . $day;
 ?>
 @extends('layouts.app')
 @section('head')
- {{-- <link rel="shortcut icon" href="img/"> --}}
- <link rel="stylesheet" href="plugins/fontawesome-free/css/all.min.css">
- <!-- Ionicons -->
- <link rel="stylesheet" href="https://code.ionicframework.com/ionicons/2.0.1/css/ionicons.min.css">
- <!-- Tempusdominus Bbootstrap 4 -->
- <link rel="stylesheet" href="plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
- <!-- iCheck -->
- <link rel="stylesheet" href="plugins/icheck-bootstrap/icheck-bootstrap.min.css">
- <!-- JQVMap -->
- <link rel="stylesheet" href="plugins/jqvmap/jqvmap.min.css">
- <!-- Theme style -->
- <link rel="stylesheet" href="dist/css/adminlte.min.css">
- <link rel="stylesheet" href="dist/css/custom_style.css">
- <!-- overlayScrollbars -->
- <link rel="stylesheet" href="plugins/overlayScrollbars/css/OverlayScrollbars.min.css">
- <!-- Daterange picker -->
- <link rel="stylesheet" href="plugins/daterangepicker/daterangepicker.css">
- <!-- summernote -->
- <link rel="stylesheet" href="plugins/summernote/summernote-bs4.css">
- <!-- Google Font: Source Sans Pro -->
- <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
- <style>
-  #tbody td{
-    text-align: center;
-  }
-  #tbody input{
-    padding: 8px;
-    border: none;
-    width: 100px;
-  } 
- </style>
+    {{-- <link rel="shortcut icon" href="img/"> --}}
+
+    <!-- Theme style -->
+    <link rel="stylesheet" href="dist/css/adminlte.min.css">
+    <link rel="stylesheet" href="dist/css/custom_style.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <!-- Google Font: Source Sans Pro -->
+    <link href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,400i,700" rel="stylesheet">
+    <style>
+        /* rosahn changes */
+        #tbody td {
+            text-align: center;
+        }
+
+        #tbody input {
+            padding: 5px 8px;
+            border: .5px solid #909090;
+            max-width: 53px;
+            background: #ffffff;
+            border-radius: 5px;
+        }
+
+        #tbody th {
+            font-size: 15px;
+            font-weight: 600;
+            text-transform: capitalize;
+        }
+
+        #tbody tr {
+            background: #f0f0f0;
+        }
+
+        .cusCard {
+            padding: 7px;
+            min-width: 139px;
+            border-radius: 7px;
+            cursor: pointer;
+            text-align: center;
+            margin: auto;
+            transition: .2s ease;
+        }
+
+        .cusCard:hover {
+            transform: translateY(-12px);
+        }
+
+        .cusCard p.title {
+            margin: 10px auto 5px auto;
+            font-size: 14px;
+            font-weight: 500;
+            border-top: 1px solid #b8b8b8;
+            width: 100%;
+            text-transform: capitalize;
+            padding-top: 5px;
+        }
+
+        .tableWidth {
+            max-width: 700px;
+        }
+
+        .cusCard span.price {
+            font-size: 13px;
+            display: flex;
+            width: 100%;
+            padding: 2px;
+            align-items: center;
+            justify-content: space-between
+        }
+
+        svg.deletClass {
+            cursor: pointer;
+        }
+
+        .cusButt {
+            float: right;
+            margin: 10px 5px;
+            text-transform: capitalize
+        }
+
+        .cliLogo {
+            max-width: 130px;
+            margin: 9px auto;
+            display: none;
+        }
+
+        @media print {
+            nav {
+                display: none !important;
+            }
+
+            #profileDropdown {
+                display: none !important;
+            }
+
+            .cardsHide,
+            .totalDetails,
+            .hideDiv,
+            .navbar {
+                display: none !important;
+            }
+
+            .tableWidth {
+                max-width: 400px;
+            }
+
+            .printTable {
+                display: block !important;
+            }
+
+            .cliLogo {
+                display: block;
+            }
+
+            th {
+                text-align: center;
+            }
+
+            td {
+                font-size: 14px;
+            }
+
+            #tbody input {
+                border: none;
+            }
+        }
+    </style>
 @endsection
 @section('content')
-<section class="content">
-  <div class="container-fluid">
-    <div class="row">
-      <div class="col-12 col-sm-12 col-md-5 col-lg-5">
-        <div class="card" style="width: 700px">
-          <div class="card-body p-0">
-            <table class="table table-bordered ">
-              <thead>
-                <tr>
-                  <th style="width: 10px">Sl</th>
-                  <th>Item Name</th>
-                  <th>Qty</th>
-                  <th >Price</th>
-                  <th >Tax</th>
-                  <th >Net Total</th>
-                  {{-- <th >demo</th> --}}
-                </tr>
-              </thead>
-              @php
-              $cnt = 1;
-          @endphp
-              <tbody id="tbody">
-                <tr id="tb">
-                  {{-- <td style="vertical-align: top;important;">{{$cnt++}}</td>
-                  <td><select  class="form-control2 prds" onchange="getStock(this)" required
-                    name="productName[]" style="border:none;background-color:  var(--bs-table-bg);width:100px;">
-                    <option value="">Select</option>
-                    @foreach ($item as $Row)
-                        <option value="{{ $Row->id }}">{{ $Row->itemname  }}</option>
-                    @endforeach
-                </select></td>
-                  <td> <input style="border:none;background-color: var(--bs-table-bg);width:100px;" class="form-control qty" name="quantities[]" min="1" required
-                    type="number" placeholder="Qty" id="qty"></td>
-                  <td><input style="border:none;background-color:  var(--bs-table-bg);width:100px;" class="form-control cst" name="price_id[]" 
-                    type="number" placeholder="Price" id="price"></td>
-                  <td><input style="border:none;background-color:  var(--bs-table-bg);width:100px;" class="form-control tax" name="tax_id[]" 
-                    type="number" placeholder="Tax" id="tax" ></td>
-                  <td><input style="border:none;background-color:  var(--bs-table-bg);width:100px;" class="form-control tamt" name="total[]" 
-                    type="number" placeholder="Total" id="total"></td> --}}
-                   
-                </tr>
-                {{-- <tr hidden id="rr"> --}}
-                  {{-- <td style="vertical-align: top;important;">{{$cnt++}}</td>
+    <section class="content">
+        <div class="container-fluid">
+            <div class="row mt-5">
+                <div class="col-lg-6">
+                    <div class="card tableWidth">
+                        <img class="cliLogo" src="{{ asset('image/citySpice-LOGO.jpeg') }}" alt="">
+                        <div class="card-body printTable p-0">
+                            <table class="table-bordered table">
+                                <thead>
+
+                                    <tr>
+                                        <th style="width: 10px" class="hideDiv">Sl</th>
+                                        <th>Item Name</th>
+                                        <th>Qty</th>
+                                        <th class="hideDiv">Price</th>
+                                        <th class="hideDiv">Tax</th>
+                                        <th class="hideDiv">Net Total</th>
+                                        <th class="hideDiv">Action</th>
+                                        {{-- <th >demo</th> --}}
+                                    </tr>
+                                </thead>
+                                @php
+                                    $cnt = 1;
+                                @endphp
+                                <tbody id="tbody">
+                                    {{-- <tr id="tb"> --}}
+                                        {{-- <td style="vertical-align: top;important;">{{$cnt++}}</td>
                   <td><select  class="form-control2 prds" onchange="getStock(this)" required
                     name="productName[]" style="border:none;background-color:  var(--bs-table-bg);width:100px;">
                     <option value="">Select</option>
@@ -102,116 +182,85 @@ $today = $year . '-' . $month . '-' . $day;
                   <td><input style="border:none;background-color:  var(--bs-table-bg);width:100px;" class="form-control tamt" name="total[]" 
                     type="number" placeholder="Total" id="total"></td> --}}
 
-                  
-                {{-- </tr> --}}
-                
-                
-               
-              </tbody>
-            </table>
-          </div>
-          <div class="card-footer">
-            <div class="row">
-             
-              <div class="col-4 col-sm-4 col-md-4 col-lg-4">
-                <label for="">Tax Total</label>
-              
-              </div>
-              <div class="col-8 col-sm-8 col-md-8 col-lg-8">
-                <div class="input-group input-group-sm mb-1">
-                  <input type="text" class="form-control" id="grosstotal"  readonly value="0">
+                                    {{-- </tr> --}}
+                                    {{-- <tr hidden id="rr"> --}}
+                                    {{-- <td style="vertical-align: top;important;">{{$cnt++}}</td>
+                  <td><select  class="form-control2 prds" onchange="getStock(this)" required
+                    name="productName[]" style="border:none;background-color:  var(--bs-table-bg);width:100px;">
+                    <option value="">Select</option>
+                    @foreach ($item as $Row)
+                        <option value="{{ $Row->id }}">{{ $Row->itemname  }}</option>
+                    @endforeach
+                </select></td>
+                  <td> <input style="border:none;background-color: var(--bs-table-bg);width:100px;" class="form-control qty" name="quantities[]" min="1" required
+                    type="number" placeholder="Qty" id="qty"></td>
+                  <td><input style="border:none;background-color:  var(--bs-table-bg);width:100px;" class="form-control cst" name="price_id[]" 
+                    type="number" placeholder="Price" id="price"></td>
+                  <td><input style="border:none;background-color:  var(--bs-table-bg);width:100px;" class="form-control tax" name="tax_id[]" 
+                    type="number" placeholder="Tax" id="tax" ></td>
+                  <td><input style="border:none;background-color:  var(--bs-table-bg);width:100px;" class="form-control tamt" name="total[]" 
+                    type="number" placeholder="Total" id="total"></td> --}}
+
+
+                                    {{-- </tr> --}}
+
+
+
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="margin: 20px 10px 10px 10px" class="totalDetails">
+                            <div class="d-flex mb-2" style="align-items: center;justify-content:end;">
+                                <label class="bolder" for="">Tax Total:</label>
+                                <div class="ms-2">
+                                    <input type="text" class="form-control" id="grosstotalTax" readonly value="0">
+                                </div>
+
+                            </div>
+                            <div class="d-flex mb-3" style="align-items: center;justify-content:end;">
+                                <label for="" class="bolder">Gross Total:</label>
+                                <div class="ms-2">
+                                    <input type="text" class="form-control" id="grosstotal" readonly value="0">
+                                </div>
+                            </div>
+                            <div class="text-center">
+                                <a href="#" class="btn btn-sm cusButt btn-danger">Cancel</a>
+                                <a href="#" class="btn cusButt btn-sm btn-success">Submit</a>
+                                <a href="#" class="btn btn-sm cusButt btn-info" onclick="window.print()">Kot
+                                    submit</a>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-              
-              </div>
+                <div class="col-lg-6 cardsHide">
+
+                    <div class="row">
+                        @foreach ($items as $item)
+                            <div data-itemname={{ $item->itemname }} data-price={{ $item->price }}
+                                data-tax={{ $item->taxrate }} class="col-6 col-sm-6 col-md-3 col-lg-3 storeitem">
+                                <div class="card cusCard">
+                                    <div class="card-body b-0 m-0 p-0">
+                                        <img src="{{ $item->file_path }}" alt="" style="width: 100px; height:100px;" class="img">
+                                    </div>
+                                    <p class="title">
+                                        {{ $item->itemname }}
+                                    </p>
+                                    <span class="price">Price: <b>₹{{ $item->price }}</b></span>
+                                </div>
+                            </div>
+                        @endforeach
+                    </div>
+                </div>
             </div>
-            <div class="row">
-             
-                <div class="col-4 col-sm-4 col-md-4 col-lg-4">
-                  <label for="">Gross Total</label>
-                
-                </div>
-                <div class="col-8 col-sm-8 col-md-8 col-lg-8">
-                  <div class="input-group input-group-sm mb-1">
-                    <input type="text" class="form-control" id="grosstotal"  readonly value="0">
-                  </div>
-                
-                </div>
-              </div>
-            <div class="text-center">
-              <a href="#" class="btn btn-sm btn-info">submit</a>
-              <a href="#" class="btn btn-sm btn-danger">Cancel</a>
-            </div>
-          </div>
         </div>
-      </div>
-      <div class="col-12 col-sm-12 col-md-7 col-lg-7" >
-       
-        <div class="row"style="margin-left: 70px;importantant">
-          @foreach ($items as $item)
-          <div data-itemname={{$item->itemname}} data-price={{$item->price}} data-tax={{$item->taxrate}} class="col-6 col-sm-6 col-md-3 col-lg-3 mt-2 storeitem">
-          
-            <div class="card p-0 m-0" >
-              <div class="card-body p-0 m-0 b-0">
-                <img src="{{$item->file_path}}" alt=""   class="img">
-              </div>
-              <div class="title">
-                {{$item->itemname}}
-              </div>
-              <div class="card-footer cf">
-                <div class="row">
-                  <div class="col-6 col-sm-6 col-md-6 col-lg-6">
-                    <span class="price"> ₹{{$item->price}}</span>
-                  </div>
-                  <div class="col-6 col-sm-6 col-md-6 col-lg-6 text-right">
-                    <a href="#" class="btn-sm btn btn-info">
-                      <i class="fa fa-cart-plus" aria-hidden="true"></i>
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </div>
-          
-          </div>
-          @endforeach
-         
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-</section>
+        </div>
+    </section>
 @endsection
 @section('script')
     <script>
-
         $(document).ready(function() {
-          
-          var count = 0;
-          $('.storeitem').on('click',function(){
-            count++;
-            var item = $(this).attr('data-itemname');
-            var price = $(this).attr('data-price');
-            var tax = $(this).attr('data-tax');
-            $('#tbody').append('<tr><td>'+count+'</td><td>'+item+'</td><td><input type="number" value="1" class="qntyitem" onChange="gettotal()" /></td><td class="priceitem">'+price+'</td><td>'+tax+'</td><td class="nettotalitem">'+price+'</td></tr>');
-            // gettotal();
-          })
-            function gettotal(){
-            var qnty = $(this).val();
-            var itempr = $(this).closest('.priceitem').html()
-            var total = qnty * itempr;
-            $('.nettotalitem').html(total); 
-         
-           }
-          // $('.qntyitem').on('keyup mouseup', function(){
-           
-          //   var qnty = $(this).val();
-           
-          //   var itempr = $(this).closest('.priceitem').html()
-          //   var total = qnty * itempr;
-           
-          //  $('.nettotalitem').html(total);
-          // })
+
             $("#btn").click(function() {
                 $(".prds option").each(function(i) {
                     if ($(this).is(':selected') && $(this).val() != '') {
@@ -228,7 +277,7 @@ $today = $year . '-' . $month . '-' . $day;
                 $(this).parent().remove();
             })
         });
-       
+
         function getStock(e) {
             $.ajax({
                 url: "stock_count/" + $(e).val(),
@@ -243,18 +292,19 @@ $today = $year . '-' . $month . '-' . $day;
                 url: "getItem/" + $(e).val(),
                 success: function(result) {
                     var data = JSON.parse(result);
-              
+
                     $(e).parent().parent().find('.prds').val(data.item);
                     // $(e).parent().parent().find('.qty').val(data.qty);
                     $(e).parent().parent().find('.cst').val(data.salesPrice);
                     $(e).parent().parent().find('.tax').val(data.taxs);
                     // $(e).parent().parent().find('.tamt').val(data.total);
-                                                         
-                    $(e).parent().parent().find('.img').attr("src",data.img);
-                   
+
+                    $(e).parent().parent().find('.img').attr("src", data.img);
+
                 }
             });
         }
+
         function getproduct(e) {
             $.ajax({
                 url: "getProduct/" + $(e).val(),
@@ -266,6 +316,7 @@ $today = $year . '-' . $month . '-' . $day;
                 }
             });
         }
+
         function remove(e) {
             $(e).parent().parent().remove();
             console.log(e);
@@ -286,45 +337,116 @@ $today = $year . '-' . $month . '-' . $day;
             var maxDate = year + '-' + month + '-' + day;
             $('#datepicker').attr('max', maxDate);
         });
-
     </script>
-    <script src="plugins/jquery/jquery.min.js"></script>
+
     <!-- jQuery UI 1.11.4 -->
-    <script src="plugins/jquery-ui/jquery-ui.min.js"></script>
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
+        integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
+    </script>
+    {{-- <script src="plugins/jquery-ui/jquery-ui.min.js"></script> --}}
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
-      $.widget.bridge('uibutton', $.ui.button)
+        $.widget.bridge('uibutton', $.ui.button)
     </script>
     <!-- Bootstrap 4 -->
-    <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
-    <!-- ChartJS -->
-    <script src="plugins/chart.js/Chart.min.js"></script>
-    <!-- Sparkline -->
-    <script src="plugins/sparklines/sparkline.js"></script>
-    <!-- JQVMap -->
-    <script src="plugins/jqvmap/jquery.vmap.min.js"></script>
-    <script src="plugins/jqvmap/maps/jquery.vmap.usa.js"></script>
-    <!-- jQuery Knob Chart -->
-    <script src="plugins/jquery-knob/jquery.knob.min.js"></script>
-    <!-- daterangepicker -->
-    <script src="plugins/moment/moment.min.js"></script>
-    <script src="plugins/daterangepicker/daterangepicker.js"></script>
-    <!-- Tempusdominus Bootstrap 4 -->
-    <script src="plugins/tempusdominus-bootstrap-4/js/tempusdominus-bootstrap-4.min.js"></script>
-    <!-- Summernote -->
-    <script src="plugins/summernote/summernote-bs4.min.js"></script>
-    <!-- overlayScrollbars -->
-    <script src="plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+    {{-- <script src="plugins/bootstrap/js/bootstrap.bundle.min.js"></script> --}}
+
+
     <!-- AdminLTE App -->
     <script src="dist/js/adminlte.js"></script>
     <script>
-      $('#price, #qty').keyup(function(){
-   var price = parseFloat($('#price').val());
-   var qty = parseFloat($('#qty').val());
-   
-   $('#total').val(price * qty );
- 
-});
- 
-   </script>
+        $('#price, #qty').keyup(function() {
+            var price = parseFloat($('#price').val());
+            var qty = parseFloat($('#qty').val());
+
+            $('#total').val(price * qty);
+
+        });
+        $(document).ready(function() {
+            var count = 0;
+            $('.storeitem').on('click', function() {
+                count++;
+                var item = $(this).attr('data-itemname');
+                var price = $(this).attr('data-price');
+                var tax = $(this).attr('data-tax');
+                $('#tbody').append('<tr><td class="hideDiv">' + count + '</td><td>' + item +
+                    '</td><td><input type="number" value="1" class="qntyitem" data-count="' + count +
+                    '" /></td><td class="priceitem' + count + ' hideDiv">' + price +
+                    '</td><td class="taxRate' + count + ' hideDiv">' + tax +
+                    '%</td><td class="nettotalitem' + count + ' hideDiv">' + price +
+                    '</td><td class="hideDiv"><svg data-taxcount="' + count + '" class="deletClass' +
+                    count +
+                    '" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></td></tr>'
+                    );
+
+                // Tax total 
+                var tax = $('.taxRate' + count + '').html();
+                tax = parseFloat(tax);
+                var cTax = $('#grosstotalTax').val();
+                cTax = parseFloat(cTax);
+                var tTax = tax + cTax;
+                $('#grosstotalTax').val(tTax);
+
+                // Gross total
+                var netT = $('.nettotalitem' + count + '').html();
+                netT = parseFloat(netT);
+                var gTot = $('#grosstotal').val();
+                gTot = parseFloat(gTot);
+                var totGross = netT + gTot;
+                $('#grosstotal').val(totGross);
+
+                // delete icon
+                $('.deletClass' + count + '').on('click', function(e) {
+                    var Acount = $(this).attr('data-taxcount');
+
+                    var curTax = $('.taxRate' + Acount + '').html();
+                    curTax = parseInt(curTax);
+
+                    var curTotal = $('.nettotalitem' + Acount + '').html();
+                    curTotal = parseInt(curTotal);
+
+                    var curTaxVal = $('#grosstotalTax').val();
+                    curTaxVal = parseFloat(curTaxVal);
+
+                    var curVal = $('#grosstotal').val();
+                    curVal = parseFloat(curVal);
+
+                    var nowTot = curVal - curTotal;
+                    nowTot = parseInt(nowTot);
+
+                    var nowTotTax = curTaxVal - curTax;
+                    nowTotTax = parseInt(nowTotTax);
+
+                    $('#grosstotal').val(nowTot);
+                    $('#grosstotalTax').val(nowTotTax);
+
+                    $(this).parent().parent().remove();
+                })
+
+                $('.qntyitem').on('keyup', function() {
+                    var qnty = $(this).val();
+                    qnty = parseFloat(qnty);
+                    var count = $(this).attr('data-count');
+                    var price = $('.priceitem' + count + '').html();
+                    price = parseFloat(price);
+                    alert(qnty);
+                    var total = qnty * price;
+                    $('.nettotalitem' + count + '').html(total);
+
+                    var curNetTot =  $('#grosstotal').val();
+                    curNetTot = parseFloat(curNetTot) + price;
+                    $('#grosstotal').val(curNetTot);
+                   
+
+                    //  alert(qnty);
+                })
+            })
+        });
+    </script>
 @endsection
