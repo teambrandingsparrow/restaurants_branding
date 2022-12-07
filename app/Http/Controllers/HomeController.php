@@ -341,9 +341,9 @@ class HomeController extends Controller
    
     public function Additem()
     {
-        $lastId = Items::count();
-        $yr = date('m') . date('y');
-        $data['number'] = 'P_' . $yr . '_' . str_pad($lastId + 1, 5, 0, STR_PAD_LEFT);
+         $lastId = Items::count();
+        // $yr = date('m') . date('y');
+        $data['number'] =  str_pad($lastId + 1, 3, 0, STR_PAD_LEFT);
         $data['qtytype']=QuantityType::get();
         return view('Additem',$data);
     }

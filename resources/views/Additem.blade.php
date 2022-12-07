@@ -33,7 +33,7 @@ $title = 'Add User | Mr:Rocks';
                         @endif
                         <form method="POST" action="{{ url('itemStore') }}" enctype="multipart/form-data">
                             @csrf
-                            @if (Auth::user()->usertype == 1)
+                            {{-- @if (Auth::user()->usertype == 1)
                                 <div class="form-group row">
                                     <div class="col-lg-3">
                                         <label class="col-form-label">Select Branch
@@ -49,19 +49,14 @@ $title = 'Add User | Mr:Rocks';
                                         </select>
                                     </div>
                                 </div>
-                            @endif
+                            @endif --}}
                             <div class="form-group row">
                                 <div class="col-lg-3">
-                                    <label class="col-form-label"> Quantity Type <span style="color: red;">*</span>
-                                    </label>
+                                    <label class="col-form-label"> Item Code<span style="color: red;">*</span></label>
                                 </div>
                                 <div class="col-lg-8">
-                                    <select class="form-control2" required name="quantitytype" required>
-                                        <option value=""> Please Select</option>
-                                        @foreach ($qtytype as $Row)
-                                            <option value="{{ $Row->id }}">{{ $Row->quantityTypes }}</option>
-                                        @endforeach
-                                    </select>
+                                    <input class="form-control" name="itemcode" type="text"
+                                       placeholder="Enter Item Code" value="{{$number}}"  required>
                                 </div>
                             </div>
                             <div class="form-group row">
@@ -84,6 +79,20 @@ $title = 'Add User | Mr:Rocks';
                             </div>
                             <div class="form-group row">
                                 <div class="col-lg-3">
+                                    <label class="col-form-label"> Quantity Type <span style="color: red;">*</span>
+                                    </label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <select class="form-control2" required name="quantitytype" required>
+                                        <option value=""> Please Select</option>
+                                        @foreach ($qtytype as $Row)
+                                            <option value="{{ $Row->id }}">{{ $Row->quantityTypes }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-3">
                                     <label class="col-form-label">Individual Price <span style="color: red;">*</span></label>
                                 </div>
                                 <div class="col-lg-8">
@@ -94,7 +103,7 @@ $title = 'Add User | Mr:Rocks';
                            
                             <div class="form-group row">
                                 <div class="col-lg-3">
-                                    <label class="col-form-label"> Tax Rate <span style="color: red;">*</span></label>
+                                    <label class="col-form-label"> Tax % <span style="color: red;">*</span></label>
                                 </div>
                                 <div class="col-lg-8">
                                     <input class="form-control" name="taxrate" id="tax_1" type="number"
@@ -102,15 +111,7 @@ $title = 'Add User | Mr:Rocks';
                                 </div>
                             </div>
                            
-                            <div class="form-group row">
-                                <div class="col-lg-3">
-                                    <label class="col-form-label"> Item Code<span style="color: red;">*</span></label>
-                                </div>
-                                <div class="col-lg-8">
-                                    <input class="form-control" name="itemcode" type="text"
-                                       placeholder="Enter Item Code" value="{{$number}}"  required>
-                                </div>
-                            </div>
+                           
                             <div class="form-group row">
                                 <div class="col-lg-3">
                                     <label class="col-form-label"> Image <span style="color: red;">*</span></label>
@@ -120,15 +121,7 @@ $title = 'Add User | Mr:Rocks';
                                        placeholder="Upload image" style="background-color:none;important" required>
                                 </div>
                             </div>
-                            {{-- <div class="form-group row">
-                                <div class="col-lg-3">
-                                    <label class="col-form-label"> Total Amount <span style="color: red;">*</span></label>
-                                </div>
-                                <div class="col-lg-8">
-                                    <input class="form-control" name="totalamount" id="total_1" type="number"
-                                    placeholder="Total Amount"  required>
-                                </div>
-                            </div> --}}
+                          
                             <center><button type="submit"style="background-color:black;border-radius:10px;"
                                     class="btn btn-primary">Add</button>
                                 <button type="reset"
