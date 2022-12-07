@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Dec 06, 2022 at 05:47 AM
+-- Generation Time: Dec 07, 2022 at 05:16 PM
 -- Server version: 10.4.25-MariaDB
 -- PHP Version: 8.1.10
 
@@ -54,7 +54,6 @@ CREATE TABLE `items` (
   `status` int(11) NOT NULL DEFAULT 0,
   `file` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `file_path` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `totalamount` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -63,11 +62,15 @@ CREATE TABLE `items` (
 -- Dumping data for table `items`
 --
 
-INSERT INTO `items` (`id`, `itemcode`, `itemname`, `quantity`, `price`, `quantitytype`, `taxrate`, `status`, `file`, `file_path`, `totalamount`, `created_at`, `updated_at`) VALUES
-(1, 'B12', 'Biriyani', 20, 100, 1, 5, 0, '1670242217388.jpg', '/uploads/1670242217388.jpg', '2000', '2022-12-05 01:07:10', '2022-12-05 06:40:17'),
-(2, 'D12', 'Dosa', 10, 10, 1, 5, 0, '1670230851602.jpg', '/uploads/1670230851602.jpg', '100', '2022-12-05 03:30:51', '2022-12-05 03:30:51'),
-(3, 'C12', 'chutney', 20, 30, 1, 5, 0, '1670231428469.jpg', '/uploads/1670231428469.jpg', '600', '2022-12-05 03:40:28', '2022-12-05 04:30:56'),
-(4, 'S12', 'sambar', 10, 40, 1, 5, 0, '1670231458341.jpg', '/uploads/1670231458341.jpg', '400', '2022-12-05 03:40:58', '2022-12-05 03:40:58');
+INSERT INTO `items` (`id`, `itemcode`, `itemname`, `quantity`, `price`, `quantitytype`, `taxrate`, `status`, `file`, `file_path`, `created_at`, `updated_at`) VALUES
+(1, 'P_1222_00001', 'Paratha', 1, 20, 1, 5, 0, '1670405163566.webp', '/uploads/1670405163566.webp', '2022-12-07 03:56:03', '2022-12-07 03:56:03'),
+(2, 'P_1222_00002', 'CP Paratha', 1, 20, 1, 5, 0, '1670405236608.webp', '/uploads/1670405236608.webp', '2022-12-07 03:57:16', '2022-12-07 03:57:16'),
+(3, 'P_1222_00003', 'Chapathi', 1, 15, 1, 5, 0, '1670405372201.webp', '/uploads/1670405372201.webp', '2022-12-07 03:59:32', '2022-12-07 03:59:32'),
+(4, 'P_1222_00004', 'Chikking Biriyani', 1, 90, 1, 5, 0, '1670407147603.webp', '/uploads/1670407147603.webp', '2022-12-07 04:29:07', '2022-12-07 04:29:07'),
+(5, 'P_1222_00005', 'Egg Biriyani', 1, 75, 1, 5, 0, '1670407222161.jpg', '/uploads/1670407222161.jpg', '2022-12-07 04:30:22', '2022-12-07 04:30:22'),
+(6, 'P_1222_00006', 'Biriyani Rice', 1, 60, 1, 5, 0, '1670407274972.jpg', '/uploads/1670407274972.jpg', '2022-12-07 04:31:14', '2022-12-07 04:31:14'),
+(7, 'P_1222_00007', 'Jeera Rice', 1, 50, 1, 5, 0, '167040729928.jpg', '/uploads/167040729928.jpg', '2022-12-07 04:31:39', '2022-12-07 04:31:39'),
+(8, 'P_1222_00008', 'Ghee Biriyani', 1, 60, 1, 5, 0, '1670407330481.jpg', '/uploads/1670407330481.jpg', '2022-12-07 04:32:10', '2022-12-07 04:32:10');
 
 -- --------------------------------------------------------
 
@@ -100,7 +103,7 @@ INSERT INTO `migrations` (`id`, `migration`, `batch`) VALUES
 (13, '2022_08_26_103759_add_clm_to_purchase_table', 1),
 (15, '2022_09_28_112122_create_quantity_types_table', 1),
 (19, '2022_08_19_101458_create_saleproducts_table', 3),
-(20, '2022_09_28_111656_create_items_table', 4);
+(22, '2022_09_28_111656_create_items_table', 4);
 
 -- --------------------------------------------------------
 
@@ -182,40 +185,6 @@ INSERT INTO `products` (`id`, `category`, `productname`, `quantity`, `create_by`
 -- --------------------------------------------------------
 
 --
--- Table structure for table `purchases`
---
-
-CREATE TABLE `purchases` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `date` date NOT NULL,
-  `invoicenumber` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `number` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `suppliername` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `create_by` int(11) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL,
-  `status` int(11) NOT NULL DEFAULT 0
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `purchase_products`
---
-
-CREATE TABLE `purchase_products` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `productName` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `purchaseid` int(11) NOT NULL,
-  `quantities` int(11) NOT NULL,
-  `create_by` int(11) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
--- --------------------------------------------------------
-
---
 -- Table structure for table `quantity_types`
 --
 
@@ -284,54 +253,7 @@ INSERT INTO `sales` (`id`, `date`, `number`, `suppliername`, `create_by`, `statu
 (1, '2022-10-17', 'BS_1022_00001', 'anas', 1, 1, '2022-10-17 06:37:59', '2022-11-22 02:16:41'),
 (2, '2022-11-18', 'BS_1122_00002', 'anas', 1, 1, '2022-11-18 03:39:26', '2022-11-22 02:16:38'),
 (3, '2022-11-18', 'BS_1122_00003', 'name', 1, 1, '2022-11-18 03:45:51', '2022-11-22 02:16:34'),
-(4, '2022-11-19', 'BS_1122_00004', 'akash k p', 1, 1, '2022-11-19 04:19:19', '2022-11-22 02:16:28'),
-(5, '2022-11-19', 'BS_1122_00005', 'anas', 1, 1, '2022-11-19 05:52:47', '2022-11-22 02:16:23'),
-(6, '2022-11-21', 'BS_1122_00006', 'name', 1, 1, '2022-11-21 04:14:12', '2022-11-22 02:16:19'),
-(7, '2022-11-21', 'BS_1122_00007', 'anas', 1, 0, '2022-11-21 05:05:07', '2022-11-21 05:05:07'),
-(8, '2022-11-22', 'BS_1122_00008', 'anas', 1, 0, '2022-11-22 02:03:35', '2022-11-22 02:03:35'),
-(9, '2022-12-01', 'BS_1222_00009', 'ajith', 1, 0, '2022-12-01 03:44:59', '2022-12-01 03:44:59');
-
--- --------------------------------------------------------
-
---
--- Table structure for table `stocks`
---
-
-CREATE TABLE `stocks` (
-  `id` bigint(20) UNSIGNED NOT NULL,
-  `stock_count` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `prodctid` int(11) NOT NULL,
-  `create_by` int(11) NOT NULL,
-  `created_at` timestamp NULL DEFAULT NULL,
-  `updated_at` timestamp NULL DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Dumping data for table `stocks`
---
-
-INSERT INTO `stocks` (`id`, `stock_count`, `prodctid`, `create_by`, `created_at`, `updated_at`) VALUES
-(1, '-43', 1, 1, '2022-10-17 06:35:00', '2022-11-23 00:42:48'),
-(2, '104', 1, 1, '2022-10-17 06:51:11', '2022-10-17 06:51:11'),
-(3, '-103', 2, 1, '2022-10-17 23:17:57', '2022-12-01 03:44:59'),
-(4, '10', 1, 1, '2022-11-21 01:34:14', '2022-11-21 01:34:14'),
-(5, '104', 2, 1, '2022-11-21 04:16:01', '2022-11-21 04:16:01'),
-(6, '10', 3, 1, '2022-12-02 06:43:15', '2022-12-02 06:43:15'),
-(7, '10', 4, 1, '2022-12-02 06:43:36', '2022-12-02 06:43:36'),
-(8, '1', 5, 1, '2022-12-02 06:45:17', '2022-12-02 06:45:17'),
-(9, '10', 6, 1, '2022-12-02 06:49:04', '2022-12-02 06:49:04'),
-(10, '1', 7, 1, '2022-12-02 06:49:21', '2022-12-02 06:49:21'),
-(11, '10', 8, 1, '2022-12-02 06:49:38', '2022-12-02 06:49:38'),
-(12, '10', 9, 1, '2022-12-02 06:55:38', '2022-12-02 06:55:38'),
-(13, '10', 10, 1, '2022-12-02 06:55:50', '2022-12-02 06:55:50'),
-(14, '1', 11, 1, '2022-12-02 06:56:05', '2022-12-02 06:56:05'),
-(15, '10', 12, 1, '2022-12-02 06:56:22', '2022-12-02 06:56:22'),
-(16, '104', 13, 1, '2022-12-02 06:56:52', '2022-12-02 06:56:52'),
-(17, '10', 14, 1, '2022-12-02 06:58:49', '2022-12-02 06:58:49'),
-(18, '10', 1, 1, '2022-12-05 01:07:10', '2022-12-05 01:07:10'),
-(19, '10', 2, 1, '2022-12-05 03:30:51', '2022-12-05 03:30:51'),
-(20, '20', 3, 1, '2022-12-05 03:40:28', '2022-12-05 03:40:28'),
-(21, '10', 4, 1, '2022-12-05 03:40:58', '2022-12-05 03:40:58');
+(4, '2022-11-19', 'BS_1122_00004', 'akash k p', 1, 1, '2022-11-19 04:19:19', '2022-11-22 02:16:28');
 
 -- --------------------------------------------------------
 
@@ -411,18 +333,6 @@ ALTER TABLE `products`
   ADD UNIQUE KEY `products_productname_unique` (`productname`);
 
 --
--- Indexes for table `purchases`
---
-ALTER TABLE `purchases`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `purchase_products`
---
-ALTER TABLE `purchase_products`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indexes for table `quantity_types`
 --
 ALTER TABLE `quantity_types`
@@ -438,12 +348,6 @@ ALTER TABLE `saleproducts`
 -- Indexes for table `sales`
 --
 ALTER TABLE `sales`
-  ADD PRIMARY KEY (`id`);
-
---
--- Indexes for table `stocks`
---
-ALTER TABLE `stocks`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -467,13 +371,13 @@ ALTER TABLE `failed_jobs`
 -- AUTO_INCREMENT for table `items`
 --
 ALTER TABLE `items`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `migrations`
 --
 ALTER TABLE `migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT for table `personal_access_tokens`
@@ -494,18 +398,6 @@ ALTER TABLE `products`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
--- AUTO_INCREMENT for table `purchases`
---
-ALTER TABLE `purchases`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
--- AUTO_INCREMENT for table `purchase_products`
---
-ALTER TABLE `purchase_products`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT;
-
---
 -- AUTO_INCREMENT for table `quantity_types`
 --
 ALTER TABLE `quantity_types`
@@ -522,12 +414,6 @@ ALTER TABLE `saleproducts`
 --
 ALTER TABLE `sales`
   MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
-
---
--- AUTO_INCREMENT for table `stocks`
---
-ALTER TABLE `stocks`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT for table `users`
