@@ -130,8 +130,7 @@ $title = 'Item Edit | ERP Bangalore';
                             </div>
                             <center><button type="submit"style="background-color:black;border-radius:10px;"
                                     class="btn btn-primary">Update</button>
-                                {{-- <button type="reset"
-                                    style="background-color:black;border-radius:10px;"value="Reset"class="btn btn-primary">Clear</button> --}}
+                              
                             </center>
                         </form>
                     </div>
