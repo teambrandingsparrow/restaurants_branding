@@ -80,7 +80,7 @@ Route::post('/QuantitytypeStore', [App\Http\Controllers\HomeController::class, '
 Route::get('/Quantitytypelist', [App\Http\Controllers\HomeController::class, 'Quantitytypelist'])->name('Quantitytypelist');
 Route::get('/Quantitytypeedit/{id}', [App\Http\Controllers\HomeController::class,'Quantitytypeedit'])->name('Quantitytypeedit');
 Route::post('/QuantitytypeUpdate/{id}', [App\Http\Controllers\HomeController::class,'QuantitytypeUpdate'])->name('QuantitytypeUpdate');
-// Route::delete('/QuantitytypeDestroy/{id}', [App\Http\Controllers\HomeController::class,'QuantitytypeDestroy'])->name('QuantitytypeDestroy');
+Route::delete('QuantitytypeDestroy/{id}', [App\Http\Controllers\HomeController::class,'QuantitytypeDestroy'])->name('QuantitytypeDestroy');
 
 //demo
 Route::get('/demo', [App\Http\Controllers\HomeController::class, 'demo'])->name('demo');

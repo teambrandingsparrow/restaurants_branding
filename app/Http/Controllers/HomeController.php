@@ -78,15 +78,17 @@ class HomeController extends Controller
 
         if (Auth::user()->usertype == 1) {
             if ($userId != 0)
-                $whr['sales.create_by'] = $userId;
+                $whr['create_by'] = $userId;
             else
                 $whr = [];
         } else
             $whr = array('sales.create_by' => Auth::user()->id);
 
-        $users= User::where('usertype', 2)->get();
-      
-        //saletable
+        $users = User::where('usertype', 2)->get();
+
+
+
+     
         $sale = Sale::select('sales.*', 'users.name')->join('users', 'users.id', 'sales.create_by')->orderBy('sales.id')
             ->where($whr)
             ->where('sales.status', 0)
@@ -108,7 +110,7 @@ class HomeController extends Controller
         $to = $toDate = $request->get('toDate') ? $request->get('toDate') : date('Y/m/d');
         $data = array();
         foreach ($sale as $row) {
-            $row['product'] = Saleproduct::join('items', 'items.id', 'saleproducts.productName')->where('saleid', $row->id)->get();
+            $row['product'] = Saleproduct::join('items', 'items.id', 'saleproducts.item')->where('saleid', $row->id)->get();
             array_push($data, $row);
         }
         return view('home',compact('data', 'userId', 'users', 'count','from','to','productCount','SaleCount'));
@@ -133,18 +135,21 @@ class HomeController extends Controller
             $data['number'] = 'P_' . $yr . '_' . str_pad($lastId + 1, 5, 0, STR_PAD_LEFT);
             $data['users'] = User::where('usertype', 2)->get();
         }
+        $lastId = Sale::count();
+        // $yr = date('m') . date('y');
+        $data['number'] =  str_pad($lastId + 1, 3, 0, STR_PAD_LEFT);
         return view('addsale', $data);
     }
     public function addsaleStore(Request $request)
     {
-        $request->validate([
-            'date' => ['required'],
-            'number' => ['required', 'string'],
-            'suppliername' => ['required', 'string'],
-            'productName' => ['required'],
-            'quantities' => ['required'],
+        // $request->validate([
+        //     'date' => ['required'],
+        //     'number' => ['required', 'string'],
+        //     'suppliername' => ['required', 'string'],
+        //     'productName' => ['required'],
+        //     'quantities' => ['required'],
 
-        ]);
+        // ]);
         if (Auth::user()->usertype == 1)
             $create_by = $request->user;
         else
@@ -152,25 +157,24 @@ class HomeController extends Controller
 
 
         $db = new Sale();
+        $db->invoice = $request->invoice;
         $db->date = $request->date;
-        $db->number = $request->number;
-        $db->suppliername = $request->suppliername;
+        $db->taxtotal = $request->taxtotal;
+        $db->grosstotal = $request->grosstotal;
         $db->create_by = $create_by;
         $db->save();
         $db->id;
-        foreach ($request->productName as $key => $productName) {
-            if ($productName != '') {
+        foreach ($request->item as $key => $item) {
+            if ($item != '') {
                 $sale = new Saleproduct();
-                $sale->productName = $productName;
-                $sale->saleid = $db->id;
-                $sale->quantities = $request->quantities[$key];
-                $sale->price_id = $request->price_id[$key];
-                $sale->tax_id = $request->tax_id[$key];
+                $sale->item = $item;
+                $sale->saleId = $db->id;
+                $sale->qty = $request->qty[$key];
+                $sale->price = $request->price[$key];
+                $sale->nettotal = $request->nettotalitem[$key];
                 $sale->create_by = Auth::user()->id;
                 $sale->save();
-                $model = Stock::where('prodctid', $productName)->first();
-                $model->decrement('stock_count', $request->quantities[$key]);
-                $model->save();
+            //    dd($request);
             }
         }
 
@@ -218,7 +222,7 @@ class HomeController extends Controller
         $to = $toDate = $request->get('toDate') ? $request->get('toDate') : date('Y/m/d');
         $data = array();
         foreach ($sale as $row) {
-            $row['product'] = Saleproduct::join('items', 'items.id', 'saleproducts.productName')->where('saleid', $row->id)->get();
+            $row['product'] = Saleproduct::join('items', 'items.id', 'saleproducts.item')->where('saleid', $row->id)->get();
             array_push($data, $row);
         }
 
@@ -297,47 +301,47 @@ class HomeController extends Controller
         return  Stock::where('prodctid', $id)->pluck('stock_count');
     }
     
-    public function salereport(Request $request)
-    {
-        $userId = $userId = $request->get('user') ? $request->get('user') : 0;
+    // public function salereport(Request $request)
+    // {
+    //     $userId = $userId = $request->get('user') ? $request->get('user') : 0;
 
-        if (Auth::user()->usertype == 1) {
-            if ($userId != 0)
-                $whr['create_by'] = $userId;
-            else
-                $whr = [];
-        } else
-            $whr = array('sales.create_by' => Auth::user()->id);
+    //     if (Auth::user()->usertype == 1) {
+    //         if ($userId != 0)
+    //             $whr['create_by'] = $userId;
+    //         else
+    //             $whr = [];
+    //     } else
+    //         $whr = array('sales.create_by' => Auth::user()->id);
 
-        $users = User::where('usertype', 2)->get();
-        // $purchase = Purchase::select('purchases.*', 'users.name')->join('users', 'users.id', 'purchases.create_by')->orderBy('purchases.id')
-        $sale = Sale::select('sales.*', 'users.name')->join('users', 'users.id', 'sales.create_by')->orderBy('sales.id')
-            ->where($whr)
-            ->where('status', 0)
-            ->get();
+    //     $users = User::where('usertype', 2)->get();
+    //     // $purchase = Purchase::select('purchases.*', 'users.name')->join('users', 'users.id', 'purchases.create_by')->orderBy('purchases.id')
+    //     $sale = Sale::select('sales.*', 'users.name')->join('users', 'users.id', 'sales.create_by')->orderBy('sales.id')
+    //         ->where($whr)
+    //         ->where('status', 0)
+    //         ->get();
 
-        $cnt = Sale::join('users', 'users.id', 'sales.create_by')->orderBy('sales.id')
-            ->where($whr)
-            ->where('status', 0)
-            ->count();
+    //     $cnt = Sale::join('users', 'users.id', 'sales.create_by')->orderBy('sales.id')
+    //         ->where($whr)
+    //         ->where('status', 0)
+    //         ->count();
 
-        if ($cnt % 10 == 0) {
-            $count = $cnt / 10;
-        } else {
-            $a = $cnt % 10;
-            $b = $cnt - $a;
-            $count = ($b / 10) + 1;
-        }
+    //     if ($cnt % 10 == 0) {
+    //         $count = $cnt / 10;
+    //     } else {
+    //         $a = $cnt % 10;
+    //         $b = $cnt - $a;
+    //         $count = ($b / 10) + 1;
+    //     }
 
-        $from = $fromDate = $request->get('fromDate') ? $request->get('fromDate') : date('2022/01/01');
-        $to = $toDate = $request->get('toDate') ? $request->get('toDate') : date('Y/m/d');
-        $data = array();
-        foreach ($sale as $row) {
-            $row['product'] = Saleproduct::join('items', 'items.id', 'saleproducts.productName')->where('saleid', $row->id)->get();
-            array_push($data, $row);
-        }
-        return view('salereport', compact('data', 'userId', 'users', 'count','from','to'));
-    }
+    //     $from = $fromDate = $request->get('fromDate') ? $request->get('fromDate') : date('2022/01/01');
+    //     $to = $toDate = $request->get('toDate') ? $request->get('toDate') : date('Y/m/d');
+    //     $data = array();
+    //     foreach ($sale as $row) {
+    //         $row['product'] = Saleproduct::join('items', 'items.id', 'saleproducts.productName')->where('saleid', $row->id)->get();
+    //         array_push($data, $row);
+    //     }
+    //     return view('salereport', compact('data', 'userId', 'users', 'count','from','to'));
+    // }
    
     public function Additem()
     {
@@ -403,7 +407,7 @@ class HomeController extends Controller
             $db->file = $fileName;
             $db->file_path = '/uploads/' . $fileName;
         }
-        $db->totalamount=$request->totalamount;
+        
         $db->save();
         return redirect('Itemlist')->with('message', 'Update Successfully');
     }
@@ -419,7 +423,8 @@ class HomeController extends Controller
     //qty add
     public function Addquantitytype()
     {
-        return view('Addquantitytype');
+        $data['qtytype']=QuantityType::get();
+        return view('Addquantitytype',$data);
     }
 
     public function QuantitytypeStore(Request $request)
@@ -469,6 +474,12 @@ class HomeController extends Controller
         }
       
         return view('demo',$data);
+    }
+
+    public function QuantitytypeDestroy(QuantityType $qtytype, $id)
+    {
+        QuantityType::where('id', $id)->delete();
+        return back()->with('message','Deleted');
     }
 
 }

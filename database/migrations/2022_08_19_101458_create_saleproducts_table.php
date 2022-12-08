@@ -15,12 +15,13 @@ return new class extends Migration
     {
         Schema::create('saleproducts', function (Blueprint $table) {
             $table->id();
-            $table->string('productName');
-            $table->integer('saleid');
-            $table->integer('quantities');
-            $table->integer('create_by');
-            $table->integer('price_id');
-            $table->integer('tax_id');
+            $table->string('item');
+            $table->string('qty');
+            $table->string('price');
+            $table->string('nettotal');
+            $table->integer('saleId');
+            $table->string('create_by');
+            $table->string('status')->default(0);
             $table->timestamps();
         });
     }

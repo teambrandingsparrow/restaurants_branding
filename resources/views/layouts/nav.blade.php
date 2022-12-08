@@ -24,9 +24,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('salelist') }}">Sales List</a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="{{ url('salereport') }}">Sales Reports</a>
-                    </li>
+                    </li> --}}
 
                 </ul>
             </div>
@@ -51,9 +51,9 @@
                     <li class="nav-item">
                         <a class="nav-link" href="{{ url('Addquantitytype') }}">Add Quantity Type</a>
                     </li>
-                    <li class="nav-item">
+                    {{-- <li class="nav-item">
                         <a class="nav-link" href="{{ url('Quantitytypelist') }}">Quantity Type List</a>
-                    </li>
+                    </li> --}}
 
                 </ul>
             </div>

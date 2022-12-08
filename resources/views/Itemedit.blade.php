@@ -33,7 +33,7 @@ $title = 'Item Edit | ERP Bangalore';
                         @endif
                         <form method="POST" action="{{ url('ItemUpdate/'.$item->id) }}" enctype="multipart/form-data">
                             @csrf
-                            @if (Auth::user()->usertype == 1)
+                            {{-- @if (Auth::user()->usertype == 1)
                                 <div class="form-group row">
                                     <div class="col-lg-3">
                                         <label class="col-form-label">Select Branch
@@ -49,7 +49,25 @@ $title = 'Item Edit | ERP Bangalore';
                                         </select>
                                     </div>
                                 </div>
-                            @endif
+                            @endif --}}
+                            <div class="form-group row">
+                                <div class="col-lg-3">
+                                    <label class="col-form-label"> Item Code<span style="color: red;">*</span></label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input class="form-control" name="itemcode" type="text"
+                                    value="{{$item->itemcode}}"placeholder="Enter Item Code">
+                                </div>
+                            </div>
+                            <div class="form-group row">
+                                <div class="col-lg-3">
+                                    <label class="col-form-label"> Item Name <span style="color: red;">*</span></label>
+                                </div>
+                                <div class="col-lg-8">
+                                    <input class="form-control" name="itemname" type="text"
+                                        value="{{$item->itemname}}"placeholder="Enter Item Name">
+                                </div>
+                            </div>
                             <div class="form-group row">
                                 <div class="col-lg-3">
                                     <label class="col-form-label"> Quantity Type <span style="color: red;">*</span>
@@ -64,24 +82,8 @@ $title = 'Item Edit | ERP Bangalore';
                                     </select>
                                 </div>
                             </div>
+                           
                             <div class="form-group row">
-                                <div class="col-lg-3">
-                                    <label class="col-form-label"> Item Name <span style="color: red;">*</span></label>
-                                </div>
-                                <div class="col-lg-8">
-                                    <input class="form-control" name="itemname" type="text"
-                                        value="{{$item->itemname}}"placeholder="Enter Item Name">
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-lg-3">
-                                    <label class="col-form-label"> Item Code<span style="color: red;">*</span></label>
-                                </div>
-                                <div class="col-lg-8">
-                                    <input class="form-control" name="itemcode" type="text"
-                                    value="{{$item->itemcode}}"placeholder="Enter Item Code">
-                                </div>
-                            </div><div class="form-group row">
                                 <div class="col-lg-3">
                                     <label class="col-form-label"> Quantity  <span style="color: red;">*</span></label>
                                 </div>
@@ -118,7 +120,7 @@ $title = 'Item Edit | ERP Bangalore';
                                        <img src="{{ $item->file_path }}" alt="" style="width:50px;height:50px;"
                                        srcset="">
                                 </div>
-                                <div class="form-group row">
+                                {{-- <div class="form-group row">
                                     <div class="col-lg-3">
                                         <label class="col-form-label">Total Amount <span style="color: red;">*</span></label>
                                     </div>
@@ -126,7 +128,7 @@ $title = 'Item Edit | ERP Bangalore';
                                         <input class="form-control" id="total_1"  name="totalamount" type="text"
                                         value="{{$item->totalamount}}"placeholder="Total Amount">
                                     </div>
-                                </div>
+                                </div> --}}
                             </div>
                             <center><button type="submit"style="background-color:black;border-radius:10px;"
                                     class="btn btn-primary">Update</button>

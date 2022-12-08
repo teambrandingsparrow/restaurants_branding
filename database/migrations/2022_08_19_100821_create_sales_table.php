@@ -15,11 +15,12 @@ return new class extends Migration
     {
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
+            $table->string('invoice');
             $table->date('date');
-            $table->string('number');
-            $table->string('suppliername');
+            $table->string('taxtotal');
+            $table->string('grosstotal');
             $table->integer('create_by');
-            $table->integer('status')->default(0);
+            $table->string('status')->default(0);
             $table->timestamps();
         });
     }

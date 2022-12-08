@@ -141,7 +141,7 @@ $current_page = 'Dashboard';
                                        
                                        
                                     </form>
-                            <table id="example"class="table table-striped table-bordered table-hover dataTables-example">
+                            <table id="example"class="table table-bordered table-bordered table-hover dataTables-example">
                                 <thead>
                                     <tr>
                                         <th> #</th>
@@ -149,10 +149,12 @@ $current_page = 'Dashboard';
                                             <th>Branch</th>
                                         @endif
                                         <th>Sale number</th>
-                                        <th>Customer Name</th>
+                                        {{-- <th></th> --}}
                                         <th>Sale Date</th>
                                         <th style="text-align: center">Product Details</th>
-                                        <th>Action</th>
+                                        <th>Tax Total</th>
+                                        <th>Gross Total</th>
+                                        {{-- <th>Action</th> --}}
                                     </tr>
 
                                 </thead>
@@ -164,8 +166,8 @@ $current_page = 'Dashboard';
                                         @endif
                                         <th></th>
                                         <th></th>
-                                        <th></th>
-                                        <th><span style="float: left;">Product Name</span>&nbsp; &nbsp; &nbsp; &nbsp;<span style="float: center;">Price</span>&nbsp; &nbsp; &nbsp; &nbsp; <span >Tax Rate</span>  <span style="float: right;">QTY</span></th>
+                                        {{-- <th></th> --}}
+                                        <th><span style="float: left;">Product Name</span>&nbsp; &nbsp; &nbsp; &nbsp;<span style="float: center;">Price</span>&nbsp; &nbsp; &nbsp; &nbsp; <span >Net Total</span>  <span style="float: right;">QTY</span></th>
                                         <th></th>
                                     </tr>
                                     @php
@@ -178,21 +180,23 @@ $current_page = 'Dashboard';
                                                 @if (Auth::user()->usertype == 1)
                                                     <td>{{ $sales->name }}</td>
                                                 @endif
-                                                <td>{{ $sales->number }}</td>
-                                                <td>{{ $sales->suppliername }}</td>
-                                                <td>{{ $sales->created_at }}</td>
+                                                <td>{{ $sales->invoice }}</td>
+                                                <td>{{ $sales->date }}</td>
+                                                {{-- <td>{{ $sales->created_at }}</td> --}}
                                                 <td>
                                                     @foreach ($sales->product as $item)
                                                         <p>
                                                             <span style="float: left;padding-right: 17%;">{{ $item->itemname }}</span>
                                                             <span
-                                                                style="float: right;padding-right: 0%;">{{ $item->quantities }}</span>
-                                                                <span style="float: left;padding-right: 7%;">{{ $item->price_id }}</span>
-                                                                <span >{{ $item->tax_id }}</span>
+                                                                style="float: right;padding-right: 0%;">{{ $item->qty }}</span>
+                                                                <span style="float: left;padding-right: 7%;">{{ $item->price }}</span>
+                                                                <span >{{ $item->nettotal }}</span><br>
                                                         </p>
                                                     @endforeach
                                                 </td>
-                                                <td>
+                                                <td>{{ $sales->taxtotal }}</td>
+                                                <td>{{ $sales->grosstotal }}</td>
+                                                {{-- <td>
                                                     <h3 style="display: flex;">
                                                         <a href="{{ url('saleedit', $sales->id) }}"
                                                             style="margin-left:3%;margin-right:3%;border:none;color:green;"><i
@@ -207,7 +211,7 @@ $current_page = 'Dashboard';
                                                                     class="fas fa-trash"></i></button>
                                                         </form>
                                                     </h3>
-                                                </td>
+                                                </td> --}}
 
 
 
