@@ -16,7 +16,6 @@ return new class extends Migration
         Schema::create('sales', function (Blueprint $table) {
             $table->id();
             $table->string('invoice');
-            $table->date('date');
             $table->string('taxtotal');
             $table->string('grosstotal');
             $table->integer('create_by');

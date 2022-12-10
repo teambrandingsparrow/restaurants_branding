@@ -158,7 +158,7 @@ class HomeController extends Controller
 
         $db = new Sale();
         $db->invoice = $request->invoice;
-        $db->date = $request->date;
+        // $db->date = $request->date;
         $db->taxtotal = $request->taxtotal;
         $db->grosstotal = $request->grosstotal;
         $db->create_by = $create_by;

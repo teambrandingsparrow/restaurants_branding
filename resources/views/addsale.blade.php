@@ -49,12 +49,12 @@ $today = $year . '-' . $month . '-' . $day;
             border-radius: 7px;
             cursor: pointer;
             text-align: center;
-            margin: auto;
+            margin: 5px auto;
             transition: .2s ease;
         }
 
         .cusCard:hover {
-            transform: translateY(-12px);
+            transform: translateY(-8px);
         }
 
         .cusCard p.title {
@@ -114,6 +114,10 @@ $today = $year . '-' . $month . '-' . $day;
             width: 200px;
             padding: 2px;
         }
+        .overflDiv{
+            height: 90vh;
+            overflow-y: auto;
+        }
 
         @media print {
             nav {
@@ -169,9 +173,9 @@ $today = $year . '-' . $month . '-' . $day;
                       <div class="demo">
                         <label><strong>Invoice Number:</strong></label>
                         <input type="text" value="{{$number}}" name="invoice">
-                     &nbsp;&nbsp;
-                        <label><strong>Date:</strong></label>
-                        <input type="date" name="date" value="{{$today}}">
+                   
+                        {{-- <label><strong>Date:</strong></label>
+                        <input type="date" name="date" value="{{$today}}"> --}}
 
                       </div>
                     <div class="card tableWidth">
@@ -183,12 +187,14 @@ $today = $year . '-' . $month . '-' . $day;
 
                                     <tr>
                                         <th style="width: 10px" class="hideDiv">Sl</th>
+                                        {{-- <th class="hideDiv">Date</th> --}}
                                         <th>Item Name</th>
                                         <th>Qty</th>
                                         <th class="hideDiv">Price</th>
                                         <th class="hideDiv" hidden></th>
                                         <th class="hideDiv">Net Total</th>
                                         <th class="hideDiv">Action</th>
+                                        
                                         {{-- <th >demo</th> --}}
                                     </tr>
                                 </thead>
@@ -270,10 +276,11 @@ $today = $year . '-' . $month . '-' . $day;
                 </div>
                 <div class="col-lg-6 cardsHide">
 
-                    <div class="row">
+                    <div class="row overflDiv">
+                        
                         @foreach ($items as $item)
                             <div data-itemname-id={{$item->id}} data-itemname={{ $item->itemname }} data-price={{ $item->price }}
-                                data-tax={{ $item->taxrate }} class="col-6 col-sm-6 col-md-3 col-lg-3 storeitem">
+                                data-tax={{ $item->taxrate }} class="col-lg-4 col-xl-3 col-sm-6 storeitem">
                                 <div class="card cusCard">
                                     <div class="card-body b-0 m-0 p-0">
                                         <img class="itemImag" src="{{ $item->file_path }}" alt="" class="img">
@@ -285,6 +292,7 @@ $today = $year . '-' . $month . '-' . $day;
                                 </div>
                             </div>
                         @endforeach
+                 
                     </div>
                 </div>
             </div>
@@ -297,6 +305,7 @@ $today = $year . '-' . $month . '-' . $day;
 @section('script')
     <script>
         $(document).ready(function() {
+           
 
             $("#btn").click(function() {
                 $(".prds option").each(function(i) {
@@ -386,6 +395,7 @@ $today = $year . '-' . $month . '-' . $day;
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
         integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous">
     </script>
+    <script type = "text/JavaScript" src = " https://MomentJS.com/downloads/moment.js"></script>
     {{-- <script src="plugins/jquery-ui/jquery-ui.min.js"></script> --}}
     <!-- Resolve conflict in jQuery UI tooltip with Bootstrap tooltip -->
     <script>
@@ -406,6 +416,8 @@ $today = $year . '-' . $month . '-' . $day;
 
         });
         $(document).ready(function() {
+          
+           
             // relaod
             $('.reload').on('click', function(){
                 var gCount = 0;
@@ -430,7 +442,7 @@ $today = $year . '-' . $month . '-' . $day;
                 var price = $(this).attr('data-price');
                 var tax = $(this).attr('data-tax');
                 $('#tbody').append('<tr class="trClasses"><td class="hideDiv">' + count + '</td>'+
-                    '<td>' + item +'<input type="text" name="item[]" hidden value="'+itemId+'"></td>'+
+                    '<td class="todayDate"hidden></td><td>' + item +'<input type="text" name="item[]" hidden value="'+itemId+'"></td>'+
                     '<td><input  type="number" name="qty[]" value="1" min="1" class="qntyitem" data-count="' + count +
                     '" /></td><td class="priceitem' + count + ' hideDiv">' + price +
                     '<input type="text" name="price[]" hidden value="'+price+'"></td><td hidden class="taxRate' + count + ' hideDiv">' + tax +
@@ -439,6 +451,9 @@ $today = $year . '-' . $month . '-' . $day;
                     count +
                     '" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></td></tr>'
                     );
+
+                    // date
+                    $('.todayDate').html(moment().format("DD/MM/YYYY"));
 
                 // Tax total 
                 var tax = $('.taxRate' + count + '').html();

@@ -120,7 +120,7 @@ $title = 'User LIst |';
                                                     <td>{{ $sales->name }}</td>
                                                 @endif
                                                 <td>{{ $sales->invoice }}</td>
-                                                <td>{{ $sales->date }}</td>
+                                                <td>{{ $sales->create_at }}</td>
                                                 {{-- <td>{{ $sales->created_at }}</td> --}}
                                                 <td>
                                                     @foreach ($sales->product as $item)
