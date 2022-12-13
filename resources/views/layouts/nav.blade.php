@@ -31,7 +31,7 @@
                 </ul>
             </div>
         </li>
-       
+       @if(Auth::user()->usertype ==1)
         <li class="nav-item @if ($current_page == 'Item') active @endif">
             <a class="nav-link" data-bs-toggle="collapse" href="#Item-elements" aria-expanded="false"
                 aria-controls="form-elements">
@@ -58,6 +58,7 @@
                 </ul>
             </div>
         </li>
+        @endif
         
     </ul>
 </nav>

@@ -103,7 +103,11 @@ $today = $year . '-' . $month . '-' . $day;
         }
         .reload{
             cursor: pointer;
+            text-align: right;
             stroke: #2196f3;
+            width: 30px;
+            height: 90px;
+            float: right;
             margin: auto 5px;
             display: none;
             transform: scale(.85);
@@ -118,7 +122,10 @@ $today = $year . '-' . $month . '-' . $day;
             height: 90vh;
             overflow-y: auto;
         }
-
+        .todatecls,
+        .toTimecls{
+            display: none;
+        }
         @media print {
             nav {
                 display: none !important;
@@ -158,6 +165,10 @@ $today = $year . '-' . $month . '-' . $day;
             #tbody input {
                 border: none;
             }
+            .todatecls,
+            .toTimecls{
+                display: block;
+            }
 
         }
     </style>
@@ -174,9 +185,9 @@ $today = $year . '-' . $month . '-' . $day;
                         <label><strong>Invoice Number:</strong></label>
                         <input type="text" value="{{$number}}" name="invoice">
                    
-                        {{-- <label><strong>Date:</strong></label>
-                        <input type="date" name="date" value="{{$today}}"> --}}
-
+                        <label class="todatecls"><strong>Date:</strong><p></p></label>
+                        <label class="toTimecls"><strong>Time:</strong><p></p></label>
+                  
                       </div>
                     <div class="card tableWidth">
                        
@@ -190,9 +201,9 @@ $today = $year . '-' . $month . '-' . $day;
                                         {{-- <th class="hideDiv">Date</th> --}}
                                         <th>Item Name</th>
                                         <th>Qty</th>
-                                        <th class="hideDiv">Price</th>
-                                        <th class="hideDiv" hidden></th>
-                                        <th class="hideDiv">Net Total</th>
+                                        <th >Price</th>
+                                        <th >Net Total</th>
+                                        <th class="hideDiv">Tax</th>
                                         <th class="hideDiv">Action</th>
                                         
                                         {{-- <th >demo</th> --}}
@@ -248,26 +259,26 @@ $today = $year . '-' . $month . '-' . $day;
                             </table>
                         </div>
                         <div style="margin: 20px 10px 10px 10px" class="totalDetails">
+                            <div class="reload">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
+                            </div>
                             <div class="d-flex mb-2" style="align-items: center;justify-content:end;">
                                 <label class="bolder" for="">Tax Total:</label>
                                 <div class="ms-2">
                                     <input type="text" class="form-control" name="taxtotal" id="grosstotalTax" readonly value="0">
                                 </div>
-
                             </div>
                             <div class="d-flex mb-3" style="align-items: center;justify-content:end;">
                                 <label for="" class="bolder">Gross Total:</label>
-                                <div class="ms-2 d-flex align-items-center">
-                                    <div class="reload">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" class="feather feather-refresh-ccw"><polyline points="1 4 1 10 7 10"/><polyline points="23 20 23 14 17 14"/><path d="M20.49 9A9 9 0 0 0 5.64 5.64L1 10m22 4l-4.64 4.36A9 9 0 0 1 3.51 15"/></svg>
-                                    </div>
+                                <div class="ms-2">
+
                                     <input type="text" class="form-control" name="grosstotal" id="grosstotal" readonly value="0">
                                 </div>
                             </div>
                             <div class="text-center">
                                 <a href="#" ><button type="reset" style="border:none;padding:5px;"class="btn btn-sm cusButt btn-danger">Cancel</button></a>
                                 <a href="#" ><button type="submit" style="border:none;padding:5px;"class="btn cusButt btn-sm btn-success">Submit</button></a>
-                                <a href="#" class="btn btn-sm cusButt btn-info" onclick="window.print()">Kot
+                                <a href="#" class="btn btn-sm cusButt btn-info kotSub" onclick="window.print()">Kot
                                     submit</a>
                             </div>
                         </div>
@@ -416,23 +427,32 @@ $today = $year . '-' . $month . '-' . $day;
 
         });
         $(document).ready(function() {
-          
+
+        //print
+        $('.kotSub').on('click', function(){
+            $('.toTimecls p').html(moment());
+        })
            
             // relaod
             $('.reload').on('click', function(){
                 var gCount = 0;
+                var tCount = 0;
                     var numCount  = $('.trClasses').length;
                     // alert(numCount)
                     // alert(numCount);
                     for(i=1;i<=numCount;i++){
                         // alert(numCount)
                         gCount = gCount + parseFloat($('.nettotalitem' + i + '').html());
+                        tCount = tCount + parseFloat($('.taxRate' + i + '').html());
              
                     }
                     numCount = 0;
 
                     var curCount = parseFloat($('#grosstotal').val());
                     $('#grosstotal').val( gCount);
+
+                    var curTaxCount = parseFloat($('#grosstotalTax').val());
+                    $('#grosstotalTax').val( tCount);
             })
             var count = 0;
             $('.storeitem').on('click', function() {
@@ -444,10 +464,9 @@ $today = $year . '-' . $month . '-' . $day;
                 $('#tbody').append('<tr class="trClasses"><td class="hideDiv">' + count + '</td>'+
                     '<td class="todayDate"hidden></td><td>' + item +'<input type="text" name="item[]" hidden value="'+itemId+'"></td>'+
                     '<td><input  type="number" name="qty[]" value="1" min="1" class="qntyitem" data-count="' + count +
-                    '" /></td><td class="priceitem' + count + ' hideDiv">' + price +
-                    '<input type="text" name="price[]" hidden value="'+price+'"></td><td hidden class="taxRate' + count + ' hideDiv">' + tax +
-                    '%</td><td class="nettotalitem' + count + ' hideDiv">' + price +
-                    '<input type="text" hidden name="nettotalitem[]" value="'+ price +'"></td><td class="hideDiv"><svg data-taxcount="' + count + '" class="deletClass' +
+                    '" /></td><td class="priceitem' + count + '">' + price +
+                    '<input type="text" name="price[]" hidden value="'+price+'"></td><td class="nettotalitem' + count + '">' + price +
+                    '<input type="text" hidden name="nettotalitem[]" value="'+ price +'"></td><td class="taxRate' + count + ' hideDiv"></td><td class="hideDiv"><svg data-taxcount="' + count + '" class="deletClass' +
                     count +
                     '" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="red" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-trash-2"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/><line x1="10" y1="11" x2="10" y2="17"/><line x1="14" y1="11" x2="14" y2="17"/></svg></td></tr>'
                     );
@@ -455,31 +474,36 @@ $today = $year . '-' . $month . '-' . $day;
                     // date
                     $('.todayDate').html(moment().format("DD/MM/YYYY"));
 
-                // Tax total 
-                var tax = $('.taxRate' + count + '').html();
-                tax = parseFloat(tax);
-                var cTax = $('#grosstotalTax').val();
-                cTax = parseFloat(cTax);
-                var tTax = tax + cTax;
-                $('#grosstotalTax').val(tTax);
 
                 // calculate tax
-                // var Tprice = parseFloat($('.priceitem' + count + '').html());
+                var Tprice = parseFloat($('.nettotalitem' + count + '').html());
+                // alert(Tprice)
                 // var taxAm = parseFloat($('.taxRate' + count + '').html());
-                // var perc = '';
-                // perc = ((Tprice * taxAm) / 100);
+                var perc = '';
+                perc = ((Tprice * tax) / 100);
+                $('.taxRate' + count + '').html(perc);
                 // var getTot = parseFloat($('.nettotalitem' + count + '').html());
                 // $('.nettotalitem' + count + '').html(getTot + perc);
                 // alert(perc);
 
 
                 // Gross total
-                var netT = $('.nettotalitem' + count + '').html();
-                netT = parseFloat(netT);
-                var gTot = $('#grosstotal').val();
-                gTot = parseFloat(gTot);
+                var netT = parseFloat($('.nettotalitem' + count + '').html());
+                var gTot = parseFloat($('#grosstotal').val());
                 var totGross = netT + gTot;
                 $('#grosstotal').val(totGross);
+
+                // Gross tax
+                var singleTax = parseFloat($('.taxRate' + count + '').html());
+                var gtaxTot = parseFloat($('#grosstotalTax').val());
+                var totGrossTax = singleTax + gtaxTot;
+                $('#grosstotalTax').val(totGrossTax);
+
+                // Tax total 
+                // var prodTax = parseFloat($('.taxRate' + count + '').html());
+                // var cTax = parseFloat($('#grosstotalTax').val());
+                // var tTax = tax + cTax;
+                // $('#grosstotalTax').val(tTax);
 
                 // delete icon
                 $('.deletClass' + count + '').on('click', function(e) {
@@ -520,11 +544,13 @@ $today = $year . '-' . $month . '-' . $day;
                     // var taxGet = parseFloat($('.taxRate' + count + '').html());
                     // var percTAX = '';
                     // percTAX = ((price * taxGet) / 100);
-
                     // var tAmtax = price + percTAX;
                     var total = qnty * price;
-                    $('.nettotalitem' + count + '').html(total);
-               
+                    $('.nettotalitem' + count + '').html('<input type="text" hidden name="nettotalitem[]" value="'+total+'">'+ total);
+                    // var netTotal =  parseFloat($('.nettotalitem' + count + '').html());
+                    var getTax = ((total * 5) / 100);
+                    $('.taxRate' + count + '').html(getTax);
+                    // alert(getTax);
                    
                     // var curNetTot =  $('#grosstotal').val();
                     // curNetTot = parseFloat(curNetTot) + price;

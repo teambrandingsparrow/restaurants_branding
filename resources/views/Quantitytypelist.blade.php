@@ -42,7 +42,7 @@ $current_page = 'Product';
                                 {{ session()->get('message') }}
                             </div>
                         @endif
-                        <div class="col-md-2">
+                        {{-- <div class="col-md-2">
                             @if (Auth::user()->usertype == 1)
                                 <form action="" method="GET">
                                     <select class="form-control2" name="user" onchange="this.form.submit()">
@@ -54,15 +54,15 @@ $current_page = 'Product';
                                     </select>
                                 </form>
                             @endif
-                        </div>
+                        </div> --}}
                         <div class="table-responsive pt-3">
                             <table id="example" class="table table-striped table-bordered table-hover dataTables-example">
                                 <thead>
                                     <tr>
                                         <th> #</th>
-                                        @if (Auth::user()->usertype == 1)
+                                        {{-- @if (Auth::user()->usertype == 1)
                                             <th> Branch </th>
-                                        @endif
+                                        @endif --}}
                                         <th> Category </th>
                                         
                                         <th>Action</th>

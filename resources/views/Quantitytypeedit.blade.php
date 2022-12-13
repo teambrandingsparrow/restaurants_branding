@@ -33,7 +33,7 @@ $title = 'Add User | Mr:Rocks';
                         @endif
                         <form method="POST" action="{{ url('QuantitytypeUpdate/'.$qtytype->id) }}">
                             @csrf
-                            @if (Auth::user()->usertype == 1)
+                            {{-- @if (Auth::user()->usertype == 1)
                                 <div class="form-group row">
                                     <div class="col-lg-3">
                                         <label class="col-form-label">Select Branch
@@ -49,7 +49,7 @@ $title = 'Add User | Mr:Rocks';
                                         </select>
                                     </div>
                                 </div>
-                            @endif
+                            @endif --}}
 
                             <div class="form-group row">
                                 <div class="col-lg-3">

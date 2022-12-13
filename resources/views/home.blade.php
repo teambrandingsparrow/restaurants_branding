@@ -141,89 +141,89 @@ $current_page = 'Dashboard';
                                        
                                        
                                     </form>
-                            <table id="example"class="table table-bordered table-bordered table-hover dataTables-example">
-                                <thead>
-                                    <tr>
-                                        <th> #</th>
-                                        @if (Auth::user()->usertype == 1)
-                                            <th>Branch</th>
-                                        @endif
-                                        <th>Sale number</th>
-                                        {{-- <th></th> --}}
-                                        <th>Sale Date</th>
-                                        <th style="text-align: center">Product Details</th>
-                                        <th>Tax Total</th>
-                                        <th>Gross Total</th>
-                                        {{-- <th>Action</th> --}}
-                                    </tr>
-
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th> </th>
-                                        @if (Auth::user()->usertype == 1)
-                                            <th></th>
-                                        @endif
-                                        <th></th>
-                                        <th></th>
-                                        {{-- <th></th> --}}
-                                        <th><span style="float: left;">Product Name</span>&nbsp; &nbsp; &nbsp; &nbsp;<span style="float: center;">Price</span>&nbsp; &nbsp; &nbsp; &nbsp; <span >Net Total</span>  <span style="float: right;">QTY</span></th>
-                                        <th></th>
-                                    </tr>
-                                    @php
-                                        $cnt = 1;
-                                    @endphp
-                                    @if (count($data) > 0)
-                                        @foreach ($data as $sales)
+                                    <table id="example"class="table table-bordered table-bordered table-hover dataTables-example">
+                                        <thead>
                                             <tr>
-                                                <td>{{ $cnt++ }}</td>
+                                                <th> #</th>
                                                 @if (Auth::user()->usertype == 1)
-                                                    <td>{{ $sales->name }}</td>
+                                                    <th>Branch</th>
                                                 @endif
-                                                <td>{{ $sales->invoice }}</td>
-                                                <td>{{ $sales->date }}</td>
-                                                {{-- <td>{{ $sales->created_at }}</td> --}}
-                                                <td>
-                                                    @foreach ($sales->product as $item)
-                                                        <p>
-                                                            <span style="float: left;padding-right: 17%;">{{ $item->itemname }}</span>
-                                                            <span
-                                                                style="float: right;padding-right: 0%;">{{ $item->qty }}</span>
-                                                                <span style="float: left;padding-right: 7%;">{{ $item->price }}</span>
-                                                                <span >{{ $item->nettotal }}</span><br>
-                                                        </p>
-                                                    @endforeach
-                                                </td>
-                                                <td>{{ $sales->taxtotal }}</td>
-                                                <td>{{ $sales->grosstotal }}</td>
-                                                {{-- <td>
-                                                    <h3 style="display: flex;">
-                                                        <a href="{{ url('saleedit', $sales->id) }}"
-                                                            style="margin-left:3%;margin-right:3%;border:none;color:green;"><i
-                                                                class="fas fa-edit"></i></a>
-                                                        <form action="{{ url('saledestroy', $sales->id) }}" method="post">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button
-                                                                type="submit"style="border:none; color: red;background-color: Transparent;
-                                                            background-repeat:no-repeat;"
-                                                                onclick="return confirm('Are you sure?')"><i
-                                                                    class="fas fa-trash"></i></button>
-                                                        </form>
-                                                    </h3>
-                                                </td> --}}
-
-
-
+                                                <th>Sale number</th>
+                                                {{-- <th></th> --}}
+                                                <th>Sale Date</th>
+                                                <th style="text-align: center">Product Details</th>
+                                                <th>Tax Total</th>
+                                                <th>Gross Total</th>
+                                                {{-- <th>Action</th> --}}
                                             </tr>
-                                        @endforeach
-                                    @else
-                                        <tr>
-                                            <td colspan="8">No Data</td>
-                                        </tr>
-                                    @endif
-                                </tbody>
-                            </table>
+        
+                                        </thead>
+                                        <tbody>
+                                            <tr>
+                                                <th> </th>
+                                                @if (Auth::user()->usertype == 1)
+                                                    <th></th>
+                                                @endif
+                                                <th></th>
+                                                <th></th>
+                                                {{-- <th></th> --}}
+                                                <th><span style="float: left;min-width: 200px;" >Product Name</span><span style="float: center;">Price</span>&nbsp; &nbsp; &nbsp; &nbsp; <span >Net Total</span>  <span style="float: right;">QTY</span></th>
+                                                <th></th>
+                                            </tr>
+                                            @php
+                                                $cnt = 1;
+                                            @endphp
+                                            @if (count($data) > 0)
+                                                @foreach ($data as $sales)
+                                                    <tr>
+                                                        <td>{{ $cnt++ }}</td>
+                                                        @if (Auth::user()->usertype == 1)
+                                                            <td>{{ $sales->name }}</td>
+                                                        @endif
+                                                        <td>{{ $sales->invoice }}</td>
+                                                        <td>{{ $sales->create_at }}</td>
+                                                        {{-- <td>{{ $sales->created_at }}</td> --}}
+                                                        <td>
+                                                            @foreach ($sales->product as $item)
+                                                                <p>
+                                                                    <span style="float: left;min-width: 200px;">{{ $item->itemname }}</span>
+                                                                    <span
+                                                                        style="float: right;padding-right: 0%;">{{ $item->qty }}</span>
+                                                                        <span style="float: left;padding-right: 7%;">{{ $item->price }}</span>
+                                                                        <span >{{ $item->nettotal }}</span><br>
+                                                                </p>
+                                                            @endforeach
+                                                        </td>
+                                                        <td>{{ $sales->taxtotal }}</td>
+                                                        <td>{{ $sales->grosstotal }}</td>
+                                                        {{-- <td>
+                                                            <h3 style="display: flex;">
+                                                                <a href="{{ url('saleedit', $sales->id) }}"
+                                                                    style="margin-left:3%;margin-right:3%;border:none;color:green;"><i
+                                                                        class="fas fa-edit"></i></a>
+                                                                <form action="{{ url('saledestroy', $sales->id) }}" method="post">
+                                                                    @csrf
+                                                                    @method('DELETE')
+                                                                    <button
+                                                                        type="submit"style="border:none; color: red;background-color: Transparent;
+                                                                    background-repeat:no-repeat;"
+                                                                        onclick="return confirm('Are you sure?')"><i
+                                                                            class="fas fa-trash"></i></button>
+                                                                </form>
+                                                            </h3>
+                                                        </td> --}}
+        
+        
+        
+                                                    </tr>
+                                                @endforeach
+                                            @else
+                                                <tr>
+                                                    <td colspan="8">No Data</td>
+                                                </tr>
+                                            @endif
+                                        </tbody>
+                                    </table>
 
                         </div>
                     </div>

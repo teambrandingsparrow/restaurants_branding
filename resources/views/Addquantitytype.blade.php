@@ -58,7 +58,7 @@ $title = 'Add User | Mr:Rocks';
                         @endif --}}
                         <form method="POST" action="{{ url('QuantitytypeStore') }}">
                             @csrf
-                            @if (Auth::user()->usertype == 1)
+                            {{-- @if (Auth::user()->usertype == 1)
                                 <div class="form-group row">
                                     <div class="col-lg-3">
                                         <label class="col-form-label">Select Branch
@@ -74,7 +74,7 @@ $title = 'Add User | Mr:Rocks';
                                         </select>
                                     </div>
                                 </div>
-                            @endif
+                            @endif --}}
                             
                             
                             <div class="form-group row">
@@ -107,14 +107,14 @@ $title = 'Add User | Mr:Rocks';
             <div class="col-lg-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
-                        <h4 class="card-title">Product List</h4>
+                        <h4 class="card-title">Quantity Type List</h4>
                         @if (session()->has('message'))
                             <div class="alert alert-success">
                                 {{ session()->get('message') }}
                             </div>
                         @endif
                         <div class="col-md-2">
-                            @if (Auth::user()->usertype == 1)
+                            {{-- @if (Auth::user()->usertype == 1)
                                 <form action="" method="GET">
                                     <select class="form-control2" name="user" onchange="this.form.submit()">
                                         <option value="">All</option>
@@ -124,18 +124,18 @@ $title = 'Add User | Mr:Rocks';
                                         @endforeach
                                     </select>
                                 </form>
-                            @endif
+                            @endif --}}
                         </div>
                         <div class="table-responsive pt-3">
                             <table id="example" class="table table-striped table-bordered table-hover dataTables-example">
                                 <thead>
                                     <tr>
                                         <th> #</th>
-                                        @if (Auth::user()->usertype == 1)
+                                        {{-- @if (Auth::user()->usertype == 1)
                                             <th> Branch </th>
-                                        @endif
-                                        <th> Category </th>
-                                        
+                                        @endif --}}
+                                      
+                                        <th>Quantity Type</th>
                                         <th>Action</th>
                                     </tr>
                                 </thead>

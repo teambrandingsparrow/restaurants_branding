@@ -150,10 +150,10 @@ class HomeController extends Controller
         //     'quantities' => ['required'],
 
         // ]);
-        if (Auth::user()->usertype == 1)
-            $create_by = $request->user;
-        else
-            $create_by = Auth::user()->id;
+        // if (Auth::user()->usertype == 1)
+        //     $create_by = $request->user;
+        // else
+        //     $create_by = Auth::user()->id;
 
 
         $db = new Sale();
@@ -161,7 +161,7 @@ class HomeController extends Controller
         // $db->date = $request->date;
         $db->taxtotal = $request->taxtotal;
         $db->grosstotal = $request->grosstotal;
-        $db->create_by = $create_by;
+        $db->create_by = Auth::user()->usertype;
         $db->save();
         $db->id;
         foreach ($request->item as $key => $item) {
@@ -450,7 +450,7 @@ class HomeController extends Controller
         $db = QuantityType::find($id);
         $db->quantityTypes = $request->quantityTypes;
         $db->save();
-        return redirect('Quantitytypelist')->with('message', 'Update Successfully');
+        return redirect('Addquantitytype')->with('message', 'Update Successfully');
     }
    
     public function demo()

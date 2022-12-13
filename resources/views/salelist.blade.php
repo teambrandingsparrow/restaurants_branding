@@ -45,7 +45,7 @@ $title = 'User LIst |';
                                 {{ session()->get('message') }}
                             </div>
                         @endif
-                        <div class="col-md-2">
+                        {{-- <div class="col-md-2">
                             @if (Auth::user()->usertype == 1)
                                 <form action="" method="GET">
                                     <select class="form-control2" name="user" onchange="this.form.submit()">
@@ -57,7 +57,7 @@ $title = 'User LIst |';
                                     </select>
                                 </form>
                             @endif
-                        </div>
+                        </div> --}}
                         <div class="table-responsive pt-3">
                              <form method="get" class="form-horizontal">
                                         @csrf
@@ -84,10 +84,10 @@ $title = 'User LIst |';
                                 <thead>
                                     <tr>
                                         <th> #</th>
-                                        @if (Auth::user()->usertype == 1)
+                                        {{-- @if (Auth::user()->usertype == 1)
                                             <th>Branch</th>
-                                        @endif
-                                        <th>Sale number</th>
+                                        @endif --}}
+                                        <th>Invoice No:</th>
                                         {{-- <th></th> --}}
                                         <th>Sale Date</th>
                                         <th style="text-align: center">Product Details</th>
@@ -104,9 +104,9 @@ $title = 'User LIst |';
                                             <th></th>
                                         @endif
                                         <th></th>
-                                        <th></th>
                                         {{-- <th></th> --}}
-                                        <th><span style="float: left;">Product Name</span>&nbsp; &nbsp; &nbsp; &nbsp;<span style="float: center;">Price</span>&nbsp; &nbsp; &nbsp; &nbsp; <span >Net Total</span>  <span style="float: right;">QTY</span></th>
+                                        {{-- <th></th> --}}
+                                        <th><span style="float: left;min-width: 300px;" >Product Name</span><span style="float: center;">Price</span>&nbsp; &nbsp; &nbsp; &nbsp; <span >Net Total</span>  <span style="float: right;">QTY</span></th>
                                         <th></th>
                                     </tr>
                                     @php
@@ -117,18 +117,18 @@ $title = 'User LIst |';
                                             <tr>
                                                 <td>{{ $cnt++ }}</td>
                                                 @if (Auth::user()->usertype == 1)
-                                                    <td>{{ $sales->name }}</td>
+                                                    {{-- <td>{{ $sales->name }}</td> --}}
                                                 @endif
                                                 <td>{{ $sales->invoice }}</td>
-                                                <td>{{ $sales->create_at }}</td>
+                                                <td>{{ $sales->created_at }}</td>
                                                 {{-- <td>{{ $sales->created_at }}</td> --}}
                                                 <td>
                                                     @foreach ($sales->product as $item)
                                                         <p>
-                                                            <span style="float: left;padding-right: 17%;">{{ $item->itemname }}</span>
+                                                            <span style="float: left;min-width: 300px;">{{ $item->itemname }}</span>
                                                             <span
                                                                 style="float: right;padding-right: 0%;">{{ $item->qty }}</span>
-                                                                <span style="float: left;padding-right: 7%;">{{ $item->price }}</span>
+                                                                <span style="float: left;padding-right: 10%;">{{ $item->price }}</span>
                                                                 <span >{{ $item->nettotal }}</span><br>
                                                         </p>
                                                     @endforeach
