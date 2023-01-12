@@ -16,6 +16,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Carbon\Carbon;
 
 class HomeController extends Controller
 {
@@ -35,7 +36,21 @@ class HomeController extends Controller
         $prd =  Items::where('id', $id)->first();
         return json_encode(array('item' => $prd->id, 'salesPrice' => $prd->price, 'qty' => $prd->quantity, 'taxs'=>$prd->taxrate,'img'=>$prd->file_path));
     }
-
+    
+     public function getItemSelected($startDate)
+    {
+       $endDate = Carbon::now();
+        $sale =  Sale::whereBetween('created_at', [$startDate, $endDate])->get();
+        $data = array();
+        foreach ($sale as $row) {
+            $row['product'] = Saleproduct::join('items', 'items.id', 'saleproducts.item')->where('saleid', $row->id)->get();
+            array_push($data, $row);
+        }
+        return ($data);
+        // return json_encode(array($data));
+        //  return json_encode(array('SL:no' => $data->id , 'Sale_Date' => $data->created_at, 'Product Details' => $data->product, 'Tax Total' => $data->taxtotal, 'Gross Total' => $data->grosstotal ));
+        //  return json_encode(array( 'salesNo' => $sale->invoice, 'taxtotal' => $sale->taxtotal, 'grossTotal'=>$sale->grosstotal));
+    }
 
     public function getProducts($id)
     {
@@ -69,6 +84,7 @@ class HomeController extends Controller
         $number = 'B' . $branch->branch . 'S_' . $yr . '_' . str_pad($lastId + 1, 5, 0, STR_PAD_LEFT);
         return json_encode(array('product' => $products, 'number' => $number));
     }
+    
     public function index(Request $request)
     {
         $productCount = Items::count();
@@ -140,6 +156,7 @@ class HomeController extends Controller
         $data['number'] =  str_pad($lastId + 1, 3, 0, STR_PAD_LEFT);
         return view('addsale', $data);
     }
+    
     public function addsaleStore(Request $request)
     {
         // $request->validate([
@@ -225,7 +242,6 @@ class HomeController extends Controller
             $row['product'] = Saleproduct::join('items', 'items.id', 'saleproducts.item')->where('saleid', $row->id)->get();
             array_push($data, $row);
         }
-
         return view('salelist', compact('data', 'userId', 'users', 'count','from','to'));
     }
     //sale edit

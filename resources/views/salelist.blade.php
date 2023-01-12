@@ -1,18 +1,15 @@
+
 <?php
 $current_page = 'Sale';
 ?>
 @extends('layouts.app')
 @section('css')
-    <link rel="stylesheet" href="https://cdn.datatables.net/1.12.1/css/jquery.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/buttons/2.2.3/css/buttons.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/searchbuilder/1.3.4/css/searchBuilder.dataTables.min.css">
-    <link rel="stylesheet" href="https://cdn.datatables.net/datetime/1.1.2/css/dataTables.dateTime.min.css">
+
     <style>
         .dataTables_info,
         .dt-button,
-        #example_previous,
-        #example_next {
+        #datable_1_previous,
+        #datable_1_next {
             color: black !important;
         }
 
@@ -20,185 +17,258 @@ $current_page = 'Sale';
             margin-top: 1.8% !important;
         }
 
-        #example_paginate>span>a {
+        #datable_1_paginate>span>a {
             color: black !important;
+            padding:7px 12px;
         }
 
         .dataTables_filter>label {
             color: black !important
         }
+        th span{
+            font-size: 12px;
+            display: inline-block;
+        }
+        td p span{
+            display: inline-block;
+        }
+        .pagination li a{
+            color: black;
+        }
+        .pagination .page-item .page-link{
+            color: black;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button{
+            padding: 0;
+        }
+        li.paginate_button:hover{
+            background: none;
+            border: none;
+        }
+        .itemNames{
+            min-width: 45%;
+        }
+        .itemPrices{
+            min-width:10%;
+            margin-right:30px;
+        }
+        .itemQuntites{
+            min-width:10%;
+            margin-right: 7%;
+        }
+       .netTotals{
+        min-width:5%;
+       }
+       .taxTotals,
+       .grossTotal{
+        text-align: center;
+       }
+       .mainHead th{
+        color: #3f51b5 !important;
+    font-weight: 600 !important;
+       }
+       .nettolCalss{
+        font-size: 20px;
+        text-align: right;
+        padding: 18px 33px;
+        display: flex;
+        justify-content: end;
+        align-items: center;
+        color: #3f51b5;
+       }
+       .nettolCalss span{
+        font-size: 25px;
+        padding-left: 10px;
+        font-weight: 600;
+        color: #383838;
+       }
     </style>
 @endsection
 <?php
-$title = 'User LIst |';
+$title = 'Sale List |';
 ?>
 @section('content')
-    <div class="content-wrapper">
-        <div class="row">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="panel panel-default card-view">
+                <div class="panel-heading">
+                    <div class="pull-left">
+                        <h6 class="panel-title txt-dark">Item list</h6>
+                    </div>
+                    <div class="clearfix"></div>
+                </div>
+                <div class="panel-wrapper collapse in">
+                    <div class="panel-body">
+                        <div class="table-wrap">
+                            <div class="table-responsive">
+                                <form method="get" class="form-horizontal">
+                                    @csrf
+                                   
+                                    <div style="max-width: 40%;"><label>Date From</label>
 
-            <div class="col-lg-12 grid-margin stretch-card">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Sale List</h4>
-                        @if (session()->has('message'))
-                            <div class="alert alert-success">
-                                {{ session()->get('message') }}
-                            </div>
-                        @endif
-                        {{-- <div class="col-md-2">
-                            @if (Auth::user()->usertype == 1)
-                                <form action="" method="GET">
-                                    <select class="form-control2" name="user" onchange="this.form.submit()">
-                                        <option value="">All</option>
-                                        @foreach ($users as $item)
-                                            <option @if ($userId == $item->id) selected @endif
-                                                value="{{ $item->id }}">{{ $item->name }}</option>
-                                        @endforeach
-                                    </select>
+                                        <div style="margin-left: 3px;"><input type="date" required  class="form-control datStart"
+                                            name="fromDate" value=""
+                                       onchange="">
+                                   </div>
+                                   
+                                    </div><br>
+                                    <div style="display: none;"><label >Date To</label>
+                                        <div style="margin-left: 3px;" ><input type="date" required name="toDate" value="" class="form-control"
+                                            onchange="" >
+                                    </div>
+                                    </div><br>
+                                   
+                                   
+                                   
                                 </form>
-                            @endif
-                        </div> --}}
-                        <div class="table-responsive pt-3">
-                             <form method="get" class="form-horizontal">
-                                        @csrf
-                                        <h5 style="display: flex;" >
-                                        <div><label>Date From</label>
-
-                                            <div style="margin-left: 3px;"><input type="date" required 
-                                                name="fromDate" value="{{ $from }}"
-                                           onchange="this.form.submit()" autocomplete="dob">
-                                       </div>
-                                       
-                                        </div><br>
-                                        <div><label >Date To</label>
-
-                                            <div style="margin-left: 3px;" ><input type="date" required name="toDate" value="{{ $to }}"
-                                                onchange="this.form.submit()" autocomplete="dob">
-                                        </div>
-                                        </div><br>
-                                        </h5>
-                                       
-                                       
-                                    </form>
-                            <table id="example"class="table table-bordered table-bordered table-hover dataTables-example">
-                                <thead>
-                                    <tr>
-                                        <th> #</th>
-                                        {{-- @if (Auth::user()->usertype == 1)
-                                            <th>Branch</th>
-                                        @endif --}}
-                                        <th>Invoice No:</th>
-                                        {{-- <th></th> --}}
-                                        <th>Sale Date</th>
-                                        <th style="text-align: center">Product Details</th>
-                                        <th>Tax Total</th>
-                                        <th>Gross Total</th>
-                                        {{-- <th>Action</th> --}}
-                                    </tr>
-
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <th> </th>
-                                        @if (Auth::user()->usertype == 1)
-                                            <th></th>
-                                        @endif
-                                        <th></th>
-                                        {{-- <th></th> --}}
-                                        {{-- <th></th> --}}
-                                        <th><span style="float: left;min-width: 300px;" >Product Name</span><span style="float: center;">Price</span>&nbsp; &nbsp; &nbsp; &nbsp; <span >Net Total</span>  <span style="float: right;">QTY</span></th>
-                                        <th></th>
-                                    </tr>
-                                    @php
-                                        $cnt = 1;
-                                    @endphp
-                                    @if (count($data) > 0)
-                                        @foreach ($data as $sales)
-                                            <tr>
-                                                <td>{{ $cnt++ }}</td>
-                                                @if (Auth::user()->usertype == 1)
-                                                    {{-- <td>{{ $sales->name }}</td> --}}
-                                                @endif
-                                                <td>{{ $sales->invoice }}</td>
-                                                <td>{{ $sales->created_at }}</td>
-                                                {{-- <td>{{ $sales->created_at }}</td> --}}
-                                                <td>
-                                                    @foreach ($sales->product as $item)
-                                                        <p>
-                                                            <span style="float: left;min-width: 300px;">{{ $item->itemname }}</span>
-                                                            <span
-                                                                style="float: right;padding-right: 0%;">{{ $item->qty }}</span>
-                                                                <span style="float: left;padding-right: 10%;">{{ $item->price }}</span>
-                                                                <span >{{ $item->nettotal }}</span><br>
-                                                        </p>
-                                                    @endforeach
-                                                </td>
-                                                <td>{{ $sales->taxtotal }}</td>
-                                                <td>{{ $sales->grosstotal }}</td>
-                                                {{-- <td>
-                                                    <h3 style="display: flex;">
-                                                        <a href="{{ url('saleedit', $sales->id) }}"
-                                                            style="margin-left:3%;margin-right:3%;border:none;color:green;"><i
-                                                                class="fas fa-edit"></i></a>
-                                                        <form action="{{ url('saledestroy', $sales->id) }}" method="post">
-                                                            @csrf
-                                                            @method('DELETE')
-                                                            <button
-                                                                type="submit"style="border:none; color: red;background-color: Transparent;
-                                                            background-repeat:no-repeat;"
-                                                                onclick="return confirm('Are you sure?')"><i
-                                                                    class="fas fa-trash"></i></button>
-                                                        </form>
-                                                    </h3>
-                                                </td> --}}
-
-
-
-                                            </tr>
-                                        @endforeach
-                                    @else
-                                        <tr>
-                                            <td colspan="8">No Data</td>
+                                <table id="datable_1" class="table table-hover display  pb-30" >
+                                    <thead>
+                                        <tr class="mainHead">
+                                            <th style="width: 20px;">SL No:</th>
+                                           
+                                            <th>Sale number</th>
+                                            <th>Sale Date</th>
+                                            <th style="text-align: center;min-width:360px">Product Details</th>
+                                            <th>Tax Total</th>
+                                            <th>Gross Total</th>
+                                           
                                         </tr>
-                                    @endif
-                                </tbody>
-                            </table>
+                                        <tr>
+                                            <th> </th>
+                                          
+                                            <th></th>
+                                            
+                                            <th></th>
+                                            <th style="color: #383838;
+                                            font-weight: 400;"><span style="float: left;min-width: 45%;" >Product Name</span><span style="min-width: 10%;margin-right:30px;">Price</span><span style="min-width: 5%;">QTY</span><span style="min-width: 23%;text-align:right;">Net Total</span>  </th>
+                                            <th></th>
+                                            <th></th>
+                                        </tr>
+    
+                                    </thead>
+     
+                                    <tbody class="dataTree">
+                                    
+                                        @php
+                                            $cnt = 1;
+                                        @endphp
+                                        @if (count($data) > 0)
+                                        @php
+                                        $TotCONT = 1;
+                                        @endphp
+                                            @foreach ($data as $sales)
+                                                <tr class="asingleSle">
+                                                    <td style="width: 20px;">{{ $cnt++ }}</td>
+                                                    <!-- @if (Auth::user()->usertype == 1)
+                                                        <td>{{ $sales->name }}</td>
+                                                    @endif -->
+                                                    <td class="invNum">{{ $sales->invoice }}</td>
+                                                    <td class="creatdAt">{{ $sales->created_at }}</td>
+                             
+                                                    <td>
+                                                        @foreach ($sales->product as $item)
+                                                            <p>
+                                                                <span class="itemNames" >{{ $item->itemname }}</span>
+                                                                <span class="itemPrices" >{{ $item->price }}</span>
+                                                                <span class="itemQuntites" >{{ $item->qty }}</span>
+                                                                <span class="netTotals" >{{ $item->nettotal }}</span><br>
+                                                            </p>
+                                                        @endforeach
+                                                    </td>
+                                                    <td class="taxTotals">{{ $sales->taxtotal }}</td>
+                                                    <td class="grossTotal">{{ $sales->grosstotal }}
+                                                    </td>
 
+                                                </tr>
+                                                @php
+                                                $TotCONT += $sales->grosstotal
+                                                @endphp
+                                                @endforeach
+                                                <input type="text" name="" value="{{$TotCONT}}" class="totalNetHidd" style="display:none !important">
+                                           
+                                        @else
+                                            <tr>
+                                                <td colspan="8">No Data</td>
+                                            </tr>
+                                        @endif
+                                       
+                                    </tbody>
+                                
+                                    
+                                </table>
+                          
+                            <p class="nettolCalss"> Net Total:<span class="totalNetGross"></span></p>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>	
         </div>
     </div>
 @endsection
 @section('script')
-    <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
-    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/dataTables.buttons.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.1.3/jszip.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/pdfmake.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdfmake/0.1.53/vfs_fonts.js"></script>
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.html5.min.js"></script>
 
-    <script src="https://cdn.datatables.net/buttons/2.2.3/js/buttons.print.min.js"></script>
-    <script src="https://cdn.datatables.net/searchbuilder/1.3.4/js/dataTables.searchBuilder.min.js"></script>
-    <script src="https://cdn.datatables.net/datetime/1.1.2/js/dataTables.dateTime.min.js"></script>
     <script>
-        $(document).ready(function() {
-            $('#example').DataTable({
-                dom: 'Bfrtip',
-                buttons: [{
-                        extend: 'excelHtml5',
-                        text: '<i style="color:green" class="fa fa-file-excel-o"></i>',
-                        titleAttr: 'Excel',
-                    },
-                    {
-                        extend: 'pdfHtml5',
-                        text: '<i style="color:red" class="fa fa-file-pdf-o"></i>',
-                        titleAttr: 'PDF'
-                    }
-                ]
-            });
+        function getNetCount(){
+            var tcount = 0;
+            $('.asingleSle').each(function(){
+                tcount += parseFloat($('.grossTotal').html());
+            })
+            $('.totalNetGross').html(tcount);
+            }
+
+   $('.datStart').on('change', function(){
+    var datatable = $('#datable_1').DataTable();
+ 
+    var strDate = $(this).val();
+            $.ajax({              
+            url: 'getItemSelected/'+strDate,
+            type: 'GET',
+            dataType: 'json',
+            success: function (response) {
+                datatable.clear().draw();
+                if(response){
+                    console.log(response);
+                    var cnt = 1;
+                    $.each(response, function(index,value){
+                        var dateChang =  moment(value.created_at).format('MMMM Do YYYY')
+
+                        var records = '<tr class="asingleSle"><td>'+cnt+'</td><td>'+value.invoice+'</td><td class="createdDate">'+dateChang+'</td>';
+                        records += '<td>';
+                        $.each(value.product, function(index,value){
+                            records += '<p><span class="itemNames">'+value.itemname+'</span><span class="itemPrices">'+value.price+'</span><span class="itemQuntites">'+value.qty+'</span><span class="netTotals">'+value.nettotal+'</span></p>';
+                        });
+                        records += '</td>';
+                        records += '<td class="taxTotals">'+value.taxtotal+'</td><td class="grossTotal">'+value.grosstotal+'</td></tr>';
+                        $('.dataTree').append(records);
+                        cnt++;
+                    });
+                    getNetCount();
+                    $('.odd').hide();
+                }
+            }
+            });  
+   });
+
+   $(document).ready(function(){
+            $('.totalNetGross').html($('.totalNetHidd').val())
         });
+        // $(document).ready(function() {
+          
+        //     $('#datable_1').DataTable({
+        //         dom: 'Bfrtip',
+        //         buttons: [{
+        //                 extend: 'excelHtml5',
+        //                 text: '<i style="color:green" class="fa fa-file-excel-o"></i>',
+        //                 titleAttr: 'Excel',
+        //             },
+        //             {
+        //                 extend: 'pdfHtml5',
+        //                 text: '<i style="color:red" class="fa fa-file-pdf-o"></i>',
+        //                 titleAttr: 'PDF'
+        //             }
+        //         ]
+        //     });
+        // });
     </script>
 @endsection

@@ -7,11 +7,12 @@ $title = 'Add User | Mr:Rocks';
 ?>
 @section('content')
     <div class="content-wrapper">
-        <div class="row grid-margin">
-            <div class="col-12">
-                <div class="card">
-                    <div class="card-body">
-                        <h4 class="card-title">Product Add</h4>
+        <div class=" grid-margin">
+            <div class="">
+                <div class="panel" style="padding: 30px;">
+                    <h4 class="panel-title">Product Add</h4>
+                    <div class="panel-body">
+                     
                         @if ($errors->any())
                             <div class="alert alert-danger">
                                 <ul>
@@ -51,82 +52,82 @@ $title = 'Add User | Mr:Rocks';
                                 </div>
                             @endif --}}
                             <div class="form-group row">
-                                <div class="col-lg-3">
+                               
                                     <label class="col-form-label"> Item Code<span style="color: red;">*</span></label>
-                                </div>
-                                <div class="col-lg-8">
+                                
+                                
                                     <input class="form-control" name="itemcode" type="text"
                                        placeholder="Enter Item Code" value="{{$number}}"  required>
-                                </div>
+                              
                             </div>
                             <div class="form-group row">
-                                <div class="col-lg-3">
+                               
                                     <label class="col-form-label"> Item Name <span style="color: red;">*</span></label>
-                                </div>
-                                <div class="col-lg-8">
+                               
+                                
                                     <input class="form-control" name="itemname" type="text"
                                         value="{{ old('itemname') }}"placeholder="Enter Item Name" required>
-                                </div>
+                               
                             </div>
                             <div class="form-group row">
-                                <div class="col-lg-3">
+                              
                                     <label class="col-form-label"> Quantity  <span style="color: red;">*</span></label>
-                                </div>
-                                <div class="col-lg-8">
+                              
+                               
                                     <input class="form-control" name="quantity" id="qty_1" type="text"
                                         value="{{ old('quantity') }}"placeholder="Enter Quantity" required>
-                                </div>
+                              
                             </div>
                             <div class="form-group row">
-                                <div class="col-lg-3">
+                               
                                     <label class="col-form-label"> Quantity Type <span style="color: red;">*</span>
                                     </label>
-                                </div>
-                                <div class="col-lg-8">
-                                    <select class="form-control2" required name="quantitytype" required>
+                               
+                              
+                                    <select class="form-control" required name="quantitytype" required>
                                         <option value=""> Please Select</option>
                                         @foreach ($qtytype as $Row)
                                             <option value="{{ $Row->id }}">{{ $Row->quantityTypes }}</option>
                                         @endforeach
                                     </select>
-                                </div>
+                             
                             </div>
                             <div class="form-group row">
-                                <div class="col-lg-3">
+                                
                                     <label class="col-form-label">Individual Price <span style="color: red;">*</span></label>
-                                </div>
-                                <div class="col-lg-8">
+                             
+                             
                                     <input class="form-control" name="price" id="price_1" type="number"
                                         value="{{ old('price') }}"placeholder="Enter Price " required>
-                                </div>
+                              
                             </div>
                            
                             <div class="form-group row">
-                                <div class="col-lg-3">
+                               
                                     <label class="col-form-label"> Tax % <span style="color: red;">*</span></label>
-                                </div>
-                                <div class="col-lg-8">
+                                
+                              
                                     <input class="form-control" name="taxrate" id="tax_1" type="number"
                                         value="{{ old('taxrate') }}"placeholder="Enter Tax Rate" required>
-                                </div>
+                              
                             </div>
                            
                            
                             <div class="form-group row">
-                                <div class="col-lg-3">
+                              
                                     <label class="col-form-label"> Image <span style="color: red;">*</span></label>
-                                </div>
-                                <div class="col-lg-8">
+                              
+                            
                                     <input class="form-control" name="file" type="file"
                                        placeholder="Upload image" style="background-color:none;important" required>
-                                </div>
+                            
                             </div>
                           
-                            <center><button type="submit"style="background-color:black;border-radius:10px;"
+                           <button type="submit"style="background-color:black;border-radius:10px;"
                                     class="btn btn-primary">Add</button>
                                 <button type="reset"
                                     style="background-color:black;border-radius:10px;"value="Reset"class="btn btn-primary">Clear</button>
-                            </center>
+                          
                         </form>
                     </div>
                 </div>

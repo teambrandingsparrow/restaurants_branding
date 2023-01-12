@@ -48,6 +48,8 @@ Route::post('/addUserStore', [App\Http\Controllers\HomeController::class, 'addUs
 // Route::post('/purchaseUpdate/{id}', [App\Http\Controllers\HomeController::class, 'purchaseUpdate'])->name('purchaseUpdate');
 // Route::delete('/destro/{id}', [App\Http\Controllers\HomeController::class, 'destro'])->name('destro');
 
+// ajax for saleslist
+Route::get('getItemSelected/{id}',[App\Http\Controllers\HomeController::class,'getItemSelected'])->name('getItemSelected');
 
 //sale route
 Route::get('/addsale', [App\Http\Controllers\HomeController::class, 'addsale'])->name('addsale');

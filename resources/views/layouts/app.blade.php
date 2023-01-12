@@ -1,82 +1,116 @@
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    {{-- <title>{{$title}}</title> --}}
-    <title>ERP</title>
-    <!-- plugins:css -->
-
-    <link rel="stylesheet" href="{{ asset('css/vendor.bundle.base.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/fontawesome.min.css') }}">
-    <link rel="stylesheet" href="{{ asset('css/themify-icons.css') }}">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css">
-    <!-- Fav icon -->
-   @yield('head')
-    @yield('css')
+    <meta charset="UTF-8" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+	<title>ERP</title>
+	<meta name="description" content="Grandin is a Dashboard & Admin Site Responsive Template by hencework." />
+	<meta name="keywords" content="admin, admin dashboard, admin template, cms, crm, Grandin Admin, Grandinadmin, premium admin templates, responsive admin, sass, panel, software, ui, visualization, web app, application" />
+	<meta name="author" content="hencework"/>
+	<!-- Favicon -->
+	<link rel="shortcut icon" href="favicon.ico">
+	<link rel="icon" href="favicon.ico" type="image/x-icon">
+	
+	<!-- Data table CSS -->
+	<link href="./vendors/bower_components/datatables/media/css/jquery.dataTables.min.css" rel="stylesheet" type="text/css"/>
+	
+	<!-- Toast CSS -->
+	<link href="./vendors/bower_components/jquery-toast-plugin/dist/jquery.toast.min.css" rel="stylesheet" type="text/css">
+		
+	<!-- Custom CSS -->
+	<link href="./dist/css/style.css" rel="stylesheet" type="text/css">
+	@yield('css')
 </head>
 
-<body data-new-gr-c-s-check-loaded="14.1062.0" data-gr-ext-installed="">
-    <div class="container-scroller">
-        <!-- partial:partials/_navbar.html -->
+<body>
+	<!-- Preloader -->
+	<div class="preloader-it">
+		<div class="la-anim-1"></div>
+	</div>
+	<!-- /Preloader -->
+    <div class="wrapper theme-5-active pimary-color-pink">
+		<!-- Top Menu Items -->
         @include('layouts.header')
-        <!-- partial -->
-        <div class="container-fluid page-body-wrapper">
-            <!-- partial:partials/_settings-panel.html -->
-            <!-- partial -->
-            <!-- partial:partials/_sidebar.html -->
-            @include('layouts.nav')
-
-            <!-- partial -->
-            <div class="main-panel">
+		<!-- /Top Menu Items -->
+		
+		<!-- Left Sidebar Menu -->
+        @include('layouts.nav')
+		<!-- /Left Sidebar Menu -->
+        <!-- Main Content -->
+		<div class="page-wrapper">
+            <div class="container-fluid pt-25">
+				<!-- Row -->
                 @yield('content')
-                <!-- content-wrapper ends -->
-                <!-- partial:partials/_footer.html -->
-                @include('layouts.footer')
-                <!-- partial -->
-            </div>
-            <!-- main-panel ends -->
-        </div>
-        <!-- page-body-wrapper ends -->
+				<!-- /Row -->
+				
+			</div>
+			
+			<!-- Footer -->
+			@include('layouts.footer')
+			<!-- /Footer -->
+			
+		</div>
+        <!-- /Main Content -->
+
     </div>
-    <!-- container-scroller -->
+    <!-- /#wrapper -->
+	
+	<!-- JavaScript -->
+	
+    <!-- jQuery -->
+    <script src="./vendors/bower_components/jquery/dist/jquery.min.js"></script>
 
-    <!-- plugins:js -->
-
-    <script src="{{ asset('js/vendor.bundle.base.js.download') }}"></script>
-    <!-- endinject -->
-    <!-- Plugin js for this page -->
-    <script src="{{ asset('js/Chart.min.js.download') }}"></script>
-    <!-- End plugin js for this page -->
-    <!-- inject:js -->
-    <script src="{{ asset('js/off-canvas.js.download') }}"></script>
-    <script src="{{ asset('js/hoverable-collapse.js.download') }}"></script>
-    <script src="{{ asset('js/template.js.download') }}"></script>
-    <script src="{{ asset('js/settings.js.download') }}"></script>
-    <script src="{{ asset('jstodolist.js.download') }}"></script>
-    <!-- endinject -->
-    <!-- Custom js for this page-->
-    <script src="{{ asset('js/dashboard.js.download') }}"></script>
-    <script src="{{ asset('js/data-table.js.download') }}"></script>
-    <script src="{{ asset('js/dataTables.bootstrap4.js.download') }}"></script>
-    <script src="{{ asset('js/data-table.js.download') }}"></script>
-    <!-- End custom js for this page-->
-    {{-- <script>
-       $('#price_1, #qty_1').keyup(function(){
-    var price = parseFloat($('#price_1').val());
-    var qty = parseFloat($('#qty_1').val());
-
-    $('#total_1').val(price * qty% );
-});
+    <!-- Bootstrap Core JavaScript -->
+    <script src="./vendors/bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
     
-    </script> --}}
-    @yield('script')
+	<!-- Data table JavaScript -->
+	<script src="./vendors/bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+	
+	<!-- Slimscroll JavaScript -->
+	<script src="./dist/js/jquery.slimscroll.js"></script>
+	
+	<!-- simpleWeather JavaScript -->
+	<script src="./vendors/bower_components/moment/min/moment.min.js"></script>
+	<script src="./vendors/bower_components/simpleWeather/jquery.simpleWeather.min.js"></script>
+	<script src="./dist/js/simpleweather-data.js"></script>
+	
+	<!-- EChartJS JavaScript -->
+	<script src="./vendors/bower_components/echarts/dist/echarts-en.min.js"></script>
+	<script src="./vendors/echarts-liquidfill.min.js"></script>
+	
+	<!-- Progressbar Animation JavaScript -->
+	<script src="./vendors/bower_components/waypoints/lib/jquery.waypoints.min.js"></script>
+	<script src="./vendors/bower_components/jquery.counterup/jquery.counterup.min.js"></script>
+	
+	<!-- Fancy Dropdown JS -->
+	<script src="./dist/js/dropdown-bootstrap-extended.js"></script>
+	
+	<!-- Sparkline JavaScript -->
+	<script src="./vendors/jquery.sparkline/dist/jquery.sparkline.min.js"></script>
+	
+	<!-- Owl JavaScript -->
+	<script src="./vendors/bower_components/owl.carousel/dist/owl.carousel.min.js"></script>
+	
+	<!-- Toast JavaScript -->
+	<script src="./vendors/bower_components/jquery-toast-plugin/dist/jquery.toast.min.js"></script>
+	
+	<!-- Piety JavaScript -->
+	<script src="./vendors/bower_components/peity/jquery.peity.min.js"></script>
+	<script src="./dist/js/peity-data.js"></script>
+	
+	<!-- Switchery JavaScript -->
+	<script src="./vendors/bower_components/switchery/dist/switchery.min.js"></script>
+	
+	<!-- Init JavaScript -->
+	<script src="./dist/js/init.js"></script>
+	<script src="./dist/js/dashboard6-data.js"></script>
 
 
-
+	 
+	  <script src="./dist/js/dataTables-data.js"></script>
+	  @yield('script')
+	 
 </body>
-<grammarly-desktop-integration data-grammarly-shadow-root="true"></grammarly-desktop-integration>
 
 </html>
