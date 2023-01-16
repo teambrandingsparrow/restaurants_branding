@@ -1,7 +1,7 @@
-<footer class="footer container-fluid pl-30 pr-30" style="position: fixed;bottom:0;left:30px;">
+<footer class="footer container-fluid" style="position: fixed;bottom:0;right:30px;">
     <div class="row">
         <div class="col-sm-12">
-            <p>2023 &copy; Desinged by Branding Sparrows</p>
+            <p style="text-align:right;">2023 &copy; Desinged by<a style="padding-left: 3px;color:#2196f3;" target="_blank" href="https://brandingsparrow.com/">brandingsparrow.com</a></p>
         </div>
     </div>
 </footer>

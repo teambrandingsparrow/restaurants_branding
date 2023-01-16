@@ -50,6 +50,7 @@ Route::post('/addUserStore', [App\Http\Controllers\HomeController::class, 'addUs
 
 // ajax for saleslist
 Route::get('getItemSelected/{id}',[App\Http\Controllers\HomeController::class,'getItemSelected'])->name('getItemSelected');
+Route::get('getItemSelectedProd/{id}{pid}',[App\Http\Controllers\HomeController::class,'getItemSelectedProd'])->name('getItemSelectedProd');
 
 //sale route
 Route::get('/addsale', [App\Http\Controllers\HomeController::class, 'addsale'])->name('addsale');
@@ -86,3 +87,5 @@ Route::delete('QuantitytypeDestroy/{id}', [App\Http\Controllers\HomeController::
 
 //demo
 Route::get('/demo', [App\Http\Controllers\HomeController::class, 'demo'])->name('demo');
+Route::get('/dailysale', [App\Http\Controllers\HomeController::class, 'dailysale'])->name('dailysale');
+

@@ -51,6 +51,21 @@ class HomeController extends Controller
         //  return json_encode(array('SL:no' => $data->id , 'Sale_Date' => $data->created_at, 'Product Details' => $data->product, 'Tax Total' => $data->taxtotal, 'Gross Total' => $data->grosstotal ));
         //  return json_encode(array( 'salesNo' => $sale->invoice, 'taxtotal' => $sale->taxtotal, 'grossTotal'=>$sale->grosstotal));
     }
+    
+     public function getItemSelectedProd($startDate,$prodId)
+    {
+       $endDate = Carbon::now();
+        $sale =  Sale::whereBetween('sales.created_at', [$startDate, $endDate])->get();
+        $data = array();
+        foreach ($sale as $row) {
+            $row['product'] = Saleproduct::join('items', 'items.id', 'saleproducts.item')->where('saleid', $row->id)->where('saleproducts.item', $prodId)->get();
+            array_push($data, $row);
+        }
+        return ($data);
+        // return json_encode(array($data));
+        //  return json_encode(array('SL:no' => $data->id , 'Sale_Date' => $data->created_at, 'Product Details' => $data->product, 'Tax Total' => $data->taxtotal, 'Gross Total' => $data->grosstotal ));
+        //  return json_encode(array( 'salesNo' => $sale->invoice, 'taxtotal' => $sale->taxtotal, 'grossTotal'=>$sale->grosstotal));
+    }
 
     public function getProducts($id)
     {
@@ -159,19 +174,7 @@ class HomeController extends Controller
     
     public function addsaleStore(Request $request)
     {
-        // $request->validate([
-        //     'date' => ['required'],
-        //     'number' => ['required', 'string'],
-        //     'suppliername' => ['required', 'string'],
-        //     'productName' => ['required'],
-        //     'quantities' => ['required'],
-
-        // ]);
-        // if (Auth::user()->usertype == 1)
-        //     $create_by = $request->user;
-        // else
-        //     $create_by = Auth::user()->id;
-
+       
 
         $db = new Sale();
         $db->invoice = $request->invoice;
@@ -317,48 +320,7 @@ class HomeController extends Controller
         return  Stock::where('prodctid', $id)->pluck('stock_count');
     }
     
-    // public function salereport(Request $request)
-    // {
-    //     $userId = $userId = $request->get('user') ? $request->get('user') : 0;
-
-    //     if (Auth::user()->usertype == 1) {
-    //         if ($userId != 0)
-    //             $whr['create_by'] = $userId;
-    //         else
-    //             $whr = [];
-    //     } else
-    //         $whr = array('sales.create_by' => Auth::user()->id);
-
-    //     $users = User::where('usertype', 2)->get();
-    //     // $purchase = Purchase::select('purchases.*', 'users.name')->join('users', 'users.id', 'purchases.create_by')->orderBy('purchases.id')
-    //     $sale = Sale::select('sales.*', 'users.name')->join('users', 'users.id', 'sales.create_by')->orderBy('sales.id')
-    //         ->where($whr)
-    //         ->where('status', 0)
-    //         ->get();
-
-    //     $cnt = Sale::join('users', 'users.id', 'sales.create_by')->orderBy('sales.id')
-    //         ->where($whr)
-    //         ->where('status', 0)
-    //         ->count();
-
-    //     if ($cnt % 10 == 0) {
-    //         $count = $cnt / 10;
-    //     } else {
-    //         $a = $cnt % 10;
-    //         $b = $cnt - $a;
-    //         $count = ($b / 10) + 1;
-    //     }
-
-    //     $from = $fromDate = $request->get('fromDate') ? $request->get('fromDate') : date('2022/01/01');
-    //     $to = $toDate = $request->get('toDate') ? $request->get('toDate') : date('Y/m/d');
-    //     $data = array();
-    //     foreach ($sale as $row) {
-    //         $row['product'] = Saleproduct::join('items', 'items.id', 'saleproducts.productName')->where('saleid', $row->id)->get();
-    //         array_push($data, $row);
-    //     }
-    //     return view('salereport', compact('data', 'userId', 'users', 'count','from','to'));
-    // }
-   
+    
     public function Additem()
     {
          $lastId = Items::count();
@@ -384,12 +346,7 @@ class HomeController extends Controller
         }
      
         $db->save();
-        // $db->id;
-        // $stock = new Stock();
-        // $stock->stock_count = $request->quantity;
-        // $stock->prodctid = $db->id;
-        // $stock->create_by = Auth::user()->id;
-        // $stock->save();
+       
         return back()->with('message', 'Product  Added Successfully');
     }
     public function Itemlist(Request $request)
@@ -497,5 +454,54 @@ class HomeController extends Controller
         QuantityType::where('id', $id)->delete();
         return back()->with('message','Deleted');
     }
+
+    public function dailysale( Request $request)
+    {
+
+        $userId = $userId = $request->get('user') ? $request->get('user') : 0;
+
+        if (Auth::user()->usertype == 1) {
+            if ($userId != 0)
+                $whr['create_by'] = $userId;
+            else
+                $whr = [];
+        } else
+            $whr = array('sales.create_by' => Auth::user()->id);
+
+        $users = User::where('usertype', 2)->get();
+
+
+
+     
+        $sale = Sale::select('sales.*', 'users.name')->join('users', 'users.id', 'sales.create_by')->orderBy('sales.id')
+            ->where($whr)
+            ->where('sales.status', 0)
+            ->get();
+
+        $cnt = Sale::join('users', 'users.id', 'sales.create_by')->orderBy('sales.id')
+            ->where($whr)
+            ->where('sales.status', 0)
+            ->count();
+
+        if ($cnt % 10 == 0) {
+            $count = $cnt / 10;
+        } else {
+            $a = $cnt % 10;
+            $b = $cnt - $a;
+            $count = ($b / 10) + 1;
+        }
+        $from = $fromDate = $request->get('fromDate') ? $request->get('fromDate') : date('2022/01/01');
+        $to = $toDate = $request->get('toDate') ? $request->get('toDate') : date('Y/m/d');
+        $data = array();
+        foreach ($sale as $row) {
+            $row['product'] = Saleproduct::join('items', 'items.id', 'saleproducts.item')->where('saleid', $row->id)->get();
+            array_push($data, $row);
+        }
+        $items=Items::get();
+        return view('dailysale', compact('data', 'userId', 'users', 'count','from','to','items'));
+    }
+   
+
+    
 
 }
